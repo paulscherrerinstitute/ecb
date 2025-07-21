@@ -1,0 +1,5 @@
+static.XY :=1;
+
+# comment
+ax${AX_M1}:=ax${AX_M2};
+

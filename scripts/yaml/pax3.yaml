@@ -1,0 +1,74 @@
+axis:
+  id: 6
+  mode: CSV
+  #parameters: powerAutoOnOff=2;powerOnDelay=6.0;powerOffDelay=1.0;
+
+epics:
+  name: TRY2
+  precision: 6
+  unit: mm
+  motorRecord:
+    enable: true
+    description: "Bottom vertical diaphragm slit"
+    fieldInit: "RTRY=1,FOFF=Frozen"
+
+drive:
+  numerator: 5                  # Scaling factor and Vmax (equivalent distance
+  denominator: 32768            # Always MAX_INT16 for this stepper drive!
+  type: 0                       # Motor type (0=Stepper, 1=Other)
+  control: ec0.s$(DRV_SLAVE).driveControl01
+  status: ec0.s$(DRV_SLAVE).driveStatus01
+  setpoint: ec0.s$(DRV_SLAVE).velocitySetpoint01
+  #error:
+  #  - 2                # Error 0 bit of status word
+
+# Ethercat entry for closed-loop
+encoder:
+  numerator: -1         # 1egu = 1mm
+  denominator: 1000000  # Encoder step size is 1nm
+  type: 1               # Encoder type (0=Incremental, 1=Absolute)
+  bits: 32              # Total bit count of encoder raw data
+  absBits: 32           # Absolute bit count (for absolute encoders)
+  absOffset: 15.63      # Encoder offset in eng units (for absolute encoders)
+  position: ec0.s$(ENC_SLAVE).positionActual$(ENC_CHANNEL)
+
+controller:
+  Kp: 20
+  Ki: 0.002
+  Kd: 0.0
+
+trajectory:
+  axis:
+    velocity: 0.5
+    acceleration: 10
+    emergencyDeceleration: 5
+
+input:
+  limit:
+    forward: ec0.s$(DRV_SLAVE).driveStatus01.12
+    backward: ec0.s$(DRV_SLAVE).driveStatus01.11
+  home: ec0.s$(DRV_SLAVE).ONE.0
+  interlock: ec0.s$(DRV_SLAVE).ONE.0
+
+softlimits:
+  enable: yes
+  backwardEnable: yes
+  forwardEnable: yes
+  forward: 2.25
+  backward: -2.75
+
+monitoring:
+  lag:
+    enable: yes
+    tolerance: 0.05
+    time: 1000
+  target:
+    enable: yes
+    tolerance: 0.001
+    time: 100
+  velocity:
+    enable: yes
+    max: 8.5
+    time:
+      trajectory: 100
+      drive: 200

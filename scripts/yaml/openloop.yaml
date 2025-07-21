@@ -1,0 +1,12 @@
+encoder:
+  desc: 'open loop'
+  unit: mm
+  numerator: -0.02
+  denominator: 12800
+  type: 0
+  bits: 16
+  absBits: 0
+  absOffset: 0
+  position: ec$(ECMC_EC_MASTER_ID).s$(DRIVE_SLAVE).positionActual01
+  homing:
+    refToEncIDAtStartup: 1

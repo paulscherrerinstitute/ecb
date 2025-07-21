@@ -1,0 +1,5 @@
+{%- if key2.a is defined %}
+  f2:A
+  {% include 'file3.inja' %}
+{%- endif %}
+f2:B

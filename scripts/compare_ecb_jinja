@@ -1,0 +1,85 @@
+#!/bin/bash
+set -e
+
+# config paths
+yaml_file="$1"
+
+ecmccfg_cpp='../../ecmccfg4inja_fork/'
+#ecmccfg_py='../../ecmccfg_unmodified'
+ecmccfg_py='../../ecmccfg4inja_fork/'
+
+# axis / encoder / plc
+py_file='axisYamlJinja2.py'
+ecb_schema='axis'
+ecb_template='axis_main.jinja2'
+
+if [ $2 == "enc" ]; then
+    echo "Encoder"
+    py_file='encYamlJinja2.py'
+    ecb_schema='encoder'
+    ecb_template='add_encoder.jinja2'
+fi
+
+if [ $2 == "plc" ]; then
+    echo "PLC"
+    py_file='plcYamlJinjs2.py'
+    ecb_schema='plc'
+    ecb_template='plc.jinja2'
+fi
+
+
+# -----------------------------------------------------------------------------
+# prepare
+# -----------------------------------------------------------------------------
+
+# make paths absolute
+yaml_file=`readlink -e "$yaml_file"`
+ecmccfg_cpp=`readlink -e "$ecmccfg_cpp"`
+ecmccfg_py=`readlink -e "$ecmccfg_py"`
+script_root=`dirname $BASH_SOURCE[0]`
+script_root=`readlink -e $script_root`
+
+rm -rfv "$script_root/result_cpp.txt"
+rm -rfv "$script_root/result_jinja2.txt"
+
+
+# -----------------------------------------------------------------------------
+# run jinja2
+# -----------------------------------------------------------------------------
+if [ ! -d "env" ]; then
+   python3 -m venv env
+   source env/bin/activate
+   pip install pyyaml cerberus jinja2 yamllint
+fi
+
+source env/bin/activate
+
+cd "$ecmccfg_py/scripts/jinja2/"
+time python3 "$py_file" -T templates --data "$yaml_file" --outfile "$script_root/result_jinja2.txt"
+cd "$script_root"
+
+
+# -----------------------------------------------------------------------------
+# run ecb
+# -----------------------------------------------------------------------------
+time ../ecb --yaml "$yaml_file" --templatedir "$ecmccfg_cpp/scripts/jinja2/templates" --template "$ecmccfg_cpp/scripts/jinja2/templates/$ecb_template" --schemafile "$ecmccfg_cpp/scripts/jinja2/ecbSchema.json" --schema "$ecb_schema" --output "$script_root/result_cpp.txt"
+
+#heaptrack ../ecb --yaml "$yaml_file" --templatedir "$ecmccfg_cpp/scripts/jinja2/templates" --template "$ecmccfg_cpp/scripts/jinja2/templates/$ecb_template" --schemafile "$ecmccfg_cpp/scripts/jinja2/ecbSchema.json" --schema "$ecb_schema" --output "$script_root/result_cpp.txt"
+
+#valgrind --tool=callgrind --trace-children=yes ../ecb --yaml "$yaml_file" --templatedir "$ecmccfg_cpp/scripts/jinja2/templates" --template "$ecmccfg_cpp/scripts/jinja2/templates/$ecb_template" --schemafile "$ecmccfg_cpp/scripts/jinja2/ecbSchema.json" --schema "$ecb_schema" --output "$script_root/result_cpp.txt"
+#valgrind --leak-check=yes ../ecb --yaml "$yaml_file" --templatedir "$ecmccfg_cpp/scripts/jinja2/templates" --template "$ecmccfg_cpp/scripts/jinja2/templates/$ecb_template" --schemafile "$ecmccfg_cpp/scripts/jinja2/ecbSchema.json" --schema "$ecb_schema" --output "$script_root/result_cpp.txt"
+#valgrind --tool=massif ../ecb --yaml "$yaml_file" --templatedir "$ecmccfg_cpp/scripts/jinja2/templates" --template "$ecmccfg_cpp/scripts/jinja2/templates/$ecb_template" --schemafile "$ecmccfg_cpp/scripts/jinja2/ecbSchema.json" --schema "$ecb_schema" --output "$script_root/result_cpp.txt"
+
+# -----------------------------------------------------------------------------
+# compare results
+# -----------------------------------------------------------------------------
+# compact the files, by removing empty lines
+#sed -i '/^\s*$/d' result_cpp.txt
+sed -i '/^\s*$/d' result_jinja2.txt
+
+# remove whitespaces at beginning of line
+#sed -i 's/^[ \t]*//' result_cpp.txt
+sed -i 's/^[ \t]*//' result_jinja2.txt
+
+#diff --ignore-case -By --color=always  --suppress-common-lines  result_cpp.txt result_jinja2.txt
+vimdiff -o "$script_root/result_cpp.txt" "$script_root/result_jinja2.txt"

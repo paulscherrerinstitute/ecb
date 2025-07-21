@@ -1,0 +1,119 @@
+# https://paulscherrerinstitute.github.io/ecmccfg/manual/axis/axisyaml/
+
+var:
+  x: encoder_1_1
+
+axis:
+  id: $(AX_ID)
+  group: $(AX_GROUP)
+  type: real
+  mode: csv
+  features:
+    allowSrcChangeWhenEnabled: true
+
+epics:
+  name: $(AX_NAME)
+  precision: 4
+  unit: "mm"
+  motorRecord:
+    description: $(AX_LOCATION)
+    fieldInit: "SPAM=0,RTRY=1,FOFF=Frozen,TWV=1"
+
+drive:
+  # numerator: -0.2
+  numerator: 10
+  denominator: 32768
+  type: 0
+  control: ec$(ECMC_EC_MASTER_ID).s$(DRIVE_SLAVE).driveControl01
+  status: ec$(ECMC_EC_MASTER_ID).s$(DRIVE_SLAVE).driveStatus01
+  setpoint: ec$(ECMC_EC_MASTER_ID).s$(DRIVE_SLAVE).velocitySetpoint01
+  reduceTorque: 2
+  reduceTorqueEnable: true
+  reset: 1
+  #brake:
+  #  enable: true
+    #    output: "asv"
+  warning: 2
+  error:
+    - 3
+
+encoder:
+  unit: "mm"
+  desc: "{{var.x}}"
+  numerator: $(ZG)
+  denominator: 4096
+  type: 1               # absolute encoder
+  source: 0
+  bits: 26
+  absBits: 26
+  mask: "0xFFF00"
+  absOffset: $(ZO)
+  control: ec$(ECMC_EC_MASTER_ID).s$(ENCODER_SLAVE).encoderControl$(ENCODER_CHANNEL)
+  position: ec$(ECMC_EC_MASTER_ID).s$(ENCODER_SLAVE).positionActual$(ENCODER_CHANNEL)
+  status: ec$(ECMC_EC_MASTER_ID).s$(ENCODER_SLAVE).encoderStatus$(ENCODER_CHANNEL)
+  latch:
+    position: "dd"
+    control: 12
+    status: 435
+  filter:
+    velocity:
+      enable: false
+      size: 100
+    trajectory:
+      enable: false
+      size: 100
+    position:
+      enable: false
+      size: 100
+
+  warning: 0
+  error:
+    - 1
+
+homing:
+  postMoveEnable: true
+  postMovePosition: 1000
+  timeout: 100
+  type: 5
+
+controller:
+  Kp: 1.00
+  Ki: 0.000
+  Kd: 0.000
+  Kff: 1.00
+
+trajectory:
+  axis:
+    velocity: 0.1
+    acceleration: 0.7
+    deceleration: 0.5
+
+input:
+  limit:
+    forward: ec$(ECMC_EC_MASTER_ID).s$(DRIVE_SLAVE).driveStatus01.11
+    backward: ec$(ECMC_EC_MASTER_ID).s$(DRIVE_SLAVE).driveStatus01.12
+  home: ec$(ECMC_EC_MASTER_ID).s$(DRIVE_SLAVE).ONE.0
+  interlock: ec$(ECMC_EC_MASTER_ID).s$(DRIVE_SLAVE).ONE.0
+
+softlimits:
+  enable: true
+  backwardEnable: true
+  forwardEnable: yes
+  forward: 55.8
+  backward: 5.1
+
+monitoring:
+  lag:
+    enable: true
+    tolerance: 0.1
+    time: 100
+  target:
+    enable: true
+    tolerance: 0.001
+    time: 100
+  velocity:
+    enable: false
+    max: 1.2
+    time:
+      trajectory: 100
+      drive: 200
