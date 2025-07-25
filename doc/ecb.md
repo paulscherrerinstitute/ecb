@@ -4,31 +4,42 @@ ecb - ecmc configuration builder
 usage
 -----
 
-usage: ecb [OPTION] ...
+      ecb [--action build] --yaml YFILE --schema SCHEMA --schemafile SFILE
+          --template TFILE --templatedir TDIR [--output OFILE]
+    
+      ecb --action readkey --yaml YFILE --key KEY [--output OFILE]
+      ecb --action updatekey --yaml YFILE --key KEY --value VAL [--output OFILE]
 
-    --action               readkey, updatekey or build (default)
-    --help                 this help text
-    --key                  key to read/write in yaml configuration
-    --output               save output to file, if this option is not specified, output is stdout. 
-    --schema               filename of given schema file
-    --schemafile           filename of schema file
-    --template             filename of template 
-    --templatedir          path to template files, needed for includes
-    --value                value to write to key in yaml configuration
-    --version              show version
-    --yaml                 filename of yaml configuration
-
-    usage: build a configuration
-      ecb [--action build] --yaml <infile> --template <templatefile> --templatedir <templates> [--output <outfile>]
-    
-    example:
-      ecb --yaml TRY.yaml --template axis_main.jinja2 --templatedir /scripts/templates
-    
-    usage: read a value from a yaml key
-      ecb --action readkey --yaml <infile> --key <key> [--output <outfile>]
-    
-    usage: write value of key in yaml
-      ecb --action updatekey --yaml <infile> --key <key> --value <value> [--output <outfile>]
+    Options:
+      --action (build|readkey|updatekey)
+          Action to run, valid options are 'build' (default), 'readkey' or
+          'updatekey'. To build configurations use 'build'. The 'readkey'
+          option reads the specified KEY in YFILE. The 'updatekey' option
+          updates the value of KEY with VAL if KEY exists in YFILE.
+      --help
+          Show this text.
+      --key KEY
+          Read or update the value of KEY. If the key doesn't exist in YFILE,
+          then ECB just quits.
+      --output OFILE
+          Write the rendered Jinja2 template to OFILE. If this option is not
+          specified, the rendered template will be written to stdout.
+      --schema SCHEMA
+          Specifie schema to use, valid options are axis, encoder or plc.
+      --schemafile SFILE
+          Filename of ECB schema file.
+      --template TFILE
+          Filename of Jinja2 template.
+      --templatedir TDIR
+          TDIR specifies the directory where the Jinja2 templates are located.
+          If a Jinja2 template includes another template, then it is expected
+          to be found in this directory
+      --value VAL
+          Update the value of KEY specified with the --key option to VAL.
+      --version
+          Show version.
+      --yaml YFILE
+          Filename of YAML configuration.
 
 
 schema file
