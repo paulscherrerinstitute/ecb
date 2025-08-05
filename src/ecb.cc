@@ -5,7 +5,7 @@
 #include "ecb.h"
 #include "ecb_arg_handler.h"
 #include "yj_cfg.h"
-
+#include "yj_common.h"
 
 int main(int argc, char* argv[])
 {
@@ -42,15 +42,7 @@ int main(int argc, char* argv[])
                     OBJ_argparser.get_yj_key_value());
 
             std::string filename = OBJ_argparser.get_output_filename();
-            std::ofstream out_file(filename);
-
-            if (out_file.is_open())
-            {
-                if (output != "")
-                    out_file << output;
-
-                out_file.close();
-            }
+            ecb::yj_common::write_file(filename, output);
 
             break;
         }
@@ -65,13 +57,7 @@ int main(int argc, char* argv[])
             if (output != "")
             {
                 std::string filename = OBJ_argparser.get_output_filename();
-                std::ofstream out_file(filename);
-
-                if (out_file.is_open())
-                {
-                    out_file << output;
-                    out_file.close();
-                }
+                ecb::yj_common::write_file(filename, output);
             }
 
             break;
@@ -113,13 +99,7 @@ int main(int argc, char* argv[])
             if (output != "")
             {
                 std::string filename = OBJ_argparser.get_output_filename();
-                std::ofstream out_file(filename);
-
-                if (out_file.is_open())
-                {
-                    out_file << output;
-                    out_file.close();
-                }
+                ecb::yj_common::write_file(filename, output);
             }
 
             break;

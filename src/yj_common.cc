@@ -1,5 +1,7 @@
-#include <regex>
+#include <fstream>
 #include <iostream>
+#include <regex>
+#include <filesystem>
 
 #include "yj_common.h"
 
@@ -84,4 +86,26 @@ ecb::yj_common::generate_json_pointer(
 {
     nlohmann::json::json_pointer json_ptr(cfg_key_to_json_key_string(key));
     return json_ptr;
+}
+
+void
+ecb::yj_common::write_file(std::string& filename, std::string& data)
+{
+    std::filesystem::path file(filename);
+
+    if (file.has_parent_path())
+    {
+        std::filesystem::path dir(filename);
+        std::filesystem::create_directories(dir.remove_filename());
+    }
+
+    std::ofstream out_file(file);
+
+    if (out_file.is_open())
+    {
+        out_file << data;
+        out_file.close();
+    }
+    else
+        throw std::runtime_error("could not create file: " + filename);
 }

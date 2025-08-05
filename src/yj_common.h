@@ -51,6 +51,12 @@ nlohmann::json::json_pointer generate_json_pointer(
 // Returns a key given in format "a.b.c" in the new format "/a/b/c".
 std::string cfg_key_to_json_key_string(
     std::string key);
+
+// write `data` to `filename`. If the parent path to `filename` does not exist,
+// it will be created. Throws an exception if `filename` cannot be created.
+void write_file(
+    std::string& filename,
+    std::string& data);
 }
 }
 
