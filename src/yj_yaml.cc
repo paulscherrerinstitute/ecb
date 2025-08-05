@@ -1,6 +1,7 @@
 #define RYML_SINGLE_HDR_DEFINE_NOW
 #include <rapidyaml.hpp>
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <regex>
@@ -191,45 +192,51 @@ ecb::YjYaml::update_yaml_key(
 void
 ecb::YjYaml::handle_plc_section(json& json)
 {
-    auto plcFilePtr = json::json_pointer("/plc/file");
-    std::vector<std::string> plcCode;
+    auto plc_file_ptr = json::json_pointer("/plc/file");
+    std::vector<std::string> plc_code;
 
-    // plc.file is defined
-    if (json.contains(plcFilePtr))
+    bool is_valid_plc_file = false;
+
+    // if plc.file is a valid file, load it
+    if (json.contains(plc_file_ptr))
     {
-        std::string filename = json[plcFilePtr];
+        std::string filename = json[plc_file_ptr];
+        std::filesystem::path plc_file(filename);
 
-        std::ifstream plc_file(filename);
-
-        if (!plc_file)
-            throw std::runtime_error("plc file not found: " + filename);
-
-        for (std::string line; std::getline(plc_file, line);)
+        if (std::filesystem::is_regular_file(plc_file))
         {
-            yj_common::remove_whitespaces(line);
+            is_valid_plc_file = true;
+            std::ifstream plc_file_stream(plc_file);
 
-            if (line.length() != 0)
-                plcCode.push_back(line);
+            for (std::string line; std::getline(plc_file_stream, line);)
+            {
+                yj_common::remove_whitespaces(line);
+
+                if (line.length() != 0)
+                    plc_code.push_back(line);
+            }
         }
     }
 
-    // plc.file and plc.code is defined
-    auto plcCodePtr = json::json_pointer("/plc/code");
-
-    if (json.contains(plcCodePtr) && json.contains(plcFilePtr))
+    // if plc.file and plc.code are defined
+    auto plc_code_ptr = json::json_pointer("/plc/code");
+    if (json.contains(plc_code_ptr) && is_valid_plc_file)
     {
-        std::vector<std::string> plcCodeYaml = json[plcCodePtr];
+        std::vector<std::string> plc_code_yaml = json[plc_code_ptr];
 
-        for (std::string line : plcCodeYaml)
+        for (std::string code_line : plc_code_yaml)
         {
-            yj_common::remove_whitespaces(line);
-            plcCode.push_back(line);
+            yj_common::remove_whitespaces(code_line);
+            plc_code.push_back(code_line);
         }
     }
 
-    // update plc.code
-    if (json.contains(plcFilePtr) || (json.contains(plcCodePtr) && json.contains(plcFilePtr)))
-        json[plcCodePtr] = plcCode;
+    // update plc.code if something changed
+    if (plc_code.size() > 0)
+    {
+        if ( is_valid_plc_file || (json.contains(plc_code_ptr) && is_valid_plc_file))
+            json[plc_code_ptr] = plc_code;
+    }
 }
 
 void
