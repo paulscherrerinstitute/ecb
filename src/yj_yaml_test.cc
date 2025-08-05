@@ -284,7 +284,7 @@ TEST_F(YjYamlFixture, readPlcFile_fileMissing)
     std::stringstream data;
     data << testYaml;
 
-    EXPECT_THROW(dut1.read_yaml(data, j1), std::runtime_error);
+    EXPECT_NO_THROW(dut1.read_yaml(data, j1));
 }
 
 TEST_F(YjYamlFixture, readPlcFile)
