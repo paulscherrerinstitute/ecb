@@ -32,8 +32,10 @@ ecb::YjYaml::read_yaml(std::istream& yaml, json& json)
     // add ECB metadata
     json::json_pointer meta_ecb_ptr("/meta/ecb");
     json::json_pointer meta_ecb_build_ptr("/meta/ecbBuild");
+    json::json_pointer meta_ecb_version_ptr("/meta/ecbVersion");
     json[meta_ecb_ptr] = true;
     json[meta_ecb_build_ptr] = std::stoi(MAKEFILE_BUILD_NUMBER);
+    json[meta_ecb_version_ptr] = MAKEFILE_VERSION;
 
     handle_plc_section(json);
     replace_yaml_variables(json);

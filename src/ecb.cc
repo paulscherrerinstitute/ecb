@@ -107,11 +107,12 @@ int main(int argc, char* argv[])
 
         case ecb::mode::BUILD_INFO:
         {
-            std::cout << "ecb - ecmc configuration builder" << std::endl
+            std::cout << "ECB - ecmc configuration builder" << std::endl
                 << "--------------------------------" << std::endl
-                << "build: #" << MAKEFILE_BUILD_NUMBER << MAKEFILE_BUILD_DIRTY << std::endl
-                << "date : " << MAKEFILE_BUILD_DATE << std::endl
-                << "hash : " << MAKEFILE_BUILD_HASH << std::endl << "---" << std::endl;
+                << "version: " << MAKEFILE_VERSION << std::endl
+                << "build  : #" << MAKEFILE_BUILD_NUMBER << MAKEFILE_BUILD_DIRTY << std::endl
+                << "date   : " << MAKEFILE_BUILD_DATE << std::endl
+                << "hash   : " << MAKEFILE_BUILD_HASH << std::endl << "---" << std::endl;
             break;
         }
 

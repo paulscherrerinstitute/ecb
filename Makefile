@@ -1,3 +1,7 @@
+# ECB - ECMC configuration builder
+
+VERSION = 1.0.0
+
 CC = clang++
 CFLAGS = -std=c++17 -Wall -Werror -O3
 CFLAGS_TEST = -g -O0 -std=c++17 -Wall -Werror
@@ -23,7 +27,7 @@ BUILD_NUMBER = $(shell git rev-list --count master)
 BUILD_DIRTY  = $(shell [ -n "$$(git status --porcelain)" ] && echo "-dirty")
 BUILD_HASH = $(shell git rev-parse HEAD)
 BUILD_DATE = $(shell date -Iseconds)
-export BUILD_INFO = -DMAKEFILE_BUILD_NUMBER="\"$(BUILD_NUMBER)\"" -DMAKEFILE_BUILD_DIRTY="\"$(BUILD_DIRTY)\"" -DMAKEFILE_BUILD_HASH="\"$(BUILD_HASH)\"" -DMAKEFILE_BUILD_DATE="\"$(BUILD_DATE)\""
+export BUILD_INFO = -DMAKEFILE_VERSION="\"$(VERSION)\"" -DMAKEFILE_BUILD_NUMBER="\"$(BUILD_NUMBER)\"" -DMAKEFILE_BUILD_DIRTY="\"$(BUILD_DIRTY)\"" -DMAKEFILE_BUILD_HASH="\"$(BUILD_HASH)\"" -DMAKEFILE_BUILD_DATE="\"$(BUILD_DATE)\""
 
 ASTYLE := --style=bsd --indent=spaces=4 --indent-switches --break-blocks --pad-oper --pad-comma --pad-header --unpad-paren --align-pointer=type --align-reference=type --max-code-length=100 --break-closing-braces --convert-tabs --remove-braces --suffix=none --indent-after-parens
 
