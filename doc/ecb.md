@@ -224,3 +224,11 @@ ECB adds basic support for the `is` keyword, which is not supported by Inja:
         {% if foo.bar is string %}
           value of key foo.bar is a string
         {% endif %}
+
+## metadata
+ECB automatically adds the following key/value pairs:
+
+- `ecb`: signalizes that ECB is used. The value is always `true`
+- `ecbVersion:" version of ECB in sematic versioning format (e.g. 1.0.0).
+- `ecbBuild`: the build number of ECB, which is a decimal number and easier to
+  use in template files compared to `ecbVersion`.

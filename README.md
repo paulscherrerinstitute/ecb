@@ -17,11 +17,11 @@
 
 ## Changelog
 
-See [CHANGELOG.md]
+See [CHANGELOG.md](CHANGELOG.md)
 
 ## Documentation
 
-See [doc/ecb.md]
+See [doc/ecb.md](doc/ecb.md)
 
 ## building
 ### dependencies
@@ -49,7 +49,7 @@ to build ECB, just type:
     make test
     ./test_ecb
 
-    # ecb debug version, disabled compiler optimization
+    # ecb debug version, disables compiler optimization
     make debug
 
 ### compare with python jinja2
