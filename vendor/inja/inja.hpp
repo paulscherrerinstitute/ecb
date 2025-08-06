@@ -1,5 +1,5 @@
 /*
-  ___        _          Version 3.4.0
+  ___        _          (Version 3.4.0) #2d1f0d0 + PR#296 + PR#306
  |_ _|_ __  (_) __ _    https://github.com/pantor/inja
   | || '_ \ | |/ _` |   Licensed under the MIT License <http://opensource.org/licenses/MIT>.
   | || | | || | (_| |
@@ -21,6 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+/* 
+This file uses the latest version from the main branch (#2d1f0d0), along with
+additional features from the pull requests #296 and #306.
+*/
+
 
 #ifndef INCLUDE_INJA_INJA_HPP_
 #define INCLUDE_INJA_INJA_HPP_
