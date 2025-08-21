@@ -23,7 +23,7 @@ TESTS :=$(wildcard src/*_test.cc)
 INCLUDE := -Isrc -Ivendor/nlohmann -Ivendor/inja -Ivendor/rapidyaml
 
 # build info
-BUILD_NUMBER = $(shell git rev-list --count master)
+BUILD_NUMBER = $(shell git rev-list --count main)
 BUILD_DIRTY  = $(shell [ -n "$$(git status --porcelain)" ] && echo "-dirty")
 BUILD_HASH = $(shell git rev-parse HEAD)
 BUILD_DATE = $(shell date -Iseconds)
