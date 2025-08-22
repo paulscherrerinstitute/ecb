@@ -46,7 +46,9 @@ ecb::YjConfiguration::build(
     // pre-eval axis.type
     if (selected_schema == "axis")
         OBJ_schema.add_default_value_from_key(cfg_data, "axis.type");
-    else if ((selected_schema == "encoder") || (selected_schema == "plc"))
+    else if (selected_schema == "plc")
+        cfg_data["/axis/type"_json_pointer] = 1;
+    else if ((selected_schema == "encoder"))
         cfg_data["/axis/type"_json_pointer] = 0;
 
     OBJ_schema.normalize(cfg_data);

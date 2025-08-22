@@ -170,7 +170,10 @@ ecb::YjSchema::add_schema_default_values(
         {
             std::string identifier_key = schema.first + ".identifier";
             auto key = ecb::yj_common::cfg_key_to_json_key_string(identifier_key);
-            std::string key_prefix = schema_[key];
+
+            std::string key_prefix = "";
+            if (schema_.contains(key))
+                key_prefix = schema_[key];
 
             for (const auto& schema_entry : schema_.items())
             {
