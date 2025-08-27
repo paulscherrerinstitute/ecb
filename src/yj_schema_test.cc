@@ -2,7 +2,7 @@
 // ECB - tests for yj_schema module
 //
 // Copyright (C) 2025, Felix Maier <felix.maier@psi.ch>
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -12,7 +12,7 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -199,7 +199,7 @@ TEST_F(YjSchemaFixture, add_default_from_key)
             "axis.abc=2": {
               "required": "axisSchema testSchema"
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -251,7 +251,7 @@ TEST_F(YjSchemaFixture, add_schema_defaults)
               "required": "axisSchema testSchema",
               "optional": "testSchema2"
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -479,7 +479,7 @@ TEST_F(YjSchemaFixture, check_required_key)
               "required": "testSchema axisSchema",
               "optional": ""
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -526,7 +526,7 @@ TEST_F(YjSchemaFixture, check_schema_required_schema_missing)
               "required": "testSchema axisSchema",
               "optional": ""
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -572,7 +572,7 @@ TEST_F(YjSchemaFixture, check_schema_optional_schema_missing)
               "required": "axisSchema",
               "optional": "testSchema"
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -618,7 +618,7 @@ TEST_F(YjSchemaFixture, check_dependencies)
               "required": "axisSchema testSchema",
               "optional": ""
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -668,7 +668,7 @@ TEST_F(YjSchemaFixture, check_undefined_dependencie)
               "required": "axisSchema testSchema",
               "optional": ""
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -710,7 +710,7 @@ TEST_F(YjSchemaFixture, check_dependencies_incomplete_key)
               "required": "axisSchema testSchema",
               "optional": ""
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -758,7 +758,7 @@ TEST_F(YjSchemaFixture, check_schema_unknown_keys)
               "required": "axisSchema testSchema",
               "optional": ""
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -810,7 +810,7 @@ TEST_F(YjSchemaFixture, check_schema_unknown_required_schema)
               "required": "axisSchema testSchema2",
               "optional": ""
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -851,7 +851,7 @@ TEST_F(YjSchemaFixture, check_schema_unknown_optional_schema)
               "required": "axisSchema",
               "optional": "testSchema2"
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -892,7 +892,7 @@ TEST_F(YjSchemaFixture, schema_remove_undefined_keys)
               "required": "axisSchema",
               "optional": "testSchema"
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -938,7 +938,7 @@ TEST_F(YjSchemaFixture, check_schema_ignore_keys)
               "required": "axisSchema",
               "optional": "varvarSchema"
             }
-          } 
+          }
         },
 
         "axisSchema": {
@@ -982,7 +982,7 @@ TEST_F(YjSchemaFixture, check_schema_ignore_keys_disabled)
               "required": "axisSchema",
               "optional": "varvarSchema"
             }
-          } 
+          }
         },
 
         "axisSchema": {
