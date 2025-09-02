@@ -144,8 +144,7 @@ ecb::YjSchema::remove_undefined_keys(nlohmann::json& cfg_data)
             }
         }
 
-        if (is_defined == true
-            || cfg_entry.key() == "/axis/type") // axis.type: nasty hack, find better solution
+        if (is_defined == true)
             clean_cfg[cfg_entry.key()] = cfg_entry.value();
         else
             ecb::yj_common::log("warning: key is not specified in schema; value will be ignored: " +

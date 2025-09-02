@@ -5,7 +5,7 @@ set -e
 yaml_file="$1"
 
 ecmccfg_cpp='../../ecmccfg4inja_fork/'
-#ecmccfg_py='../../ecmccfg_unmodified'
+#ecmccfg_py='../../ecmccfg'
 ecmccfg_py='../../ecmccfg4inja_fork/'
 
 # axis / encoder / plc
@@ -22,7 +22,7 @@ fi
 
 if [ $2 == "plc" ]; then
     echo "PLC"
-    py_file='plcYamlJinjs2.py'
+    py_file='plcYamlJinja2.py'
     ecb_schema='plc'
     ecb_template='plc.jinja2'
 fi
