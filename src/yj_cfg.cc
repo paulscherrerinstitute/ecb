@@ -72,7 +72,8 @@ ecb::YjConfiguration::build(
     OBJ_schema.add_schema_default_values(cfg_data);
     OBJ_schema.check_datatypes(cfg_data);
     OBJ_schema.normalize(cfg_data);
-    cfg_data["/meta/schemaNumber"_json_pointer] = cfg_data["/axis/type"_json_pointer];
+    if (selected_schema == "axis")
+        cfg_data["/meta/schemaNumber"_json_pointer] = cfg_data["/axis/type"_json_pointer];
     // TODO: add function to check for allowed values
     OBJ_schema.check_schema(selected_schema, cfg_data);
     OBJ_schema.check_for_valid_keys(cfg_data);
