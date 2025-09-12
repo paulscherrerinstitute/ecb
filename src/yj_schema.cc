@@ -119,6 +119,50 @@ ecb::YjSchema::normalize(json& json)
 }
 
 void
+ecb::YjSchema::check_min_max_ranges(nlohmann::json& json)
+{
+    for (const auto& schema_entry : schema_.items())
+    {
+        // check "min" range
+        if ((schema_entry.key().find("/min") == std::string::npos)
+            && schema_entry.key().find("/max") == std::string::npos)
+            continue;
+        else
+        {
+            const bool isMax = (schema_entry.key().find("/max") != std::string::npos);
+            const std::string::size_type key_end = schema_entry.key().rfind("/");
+            const std::string::size_type key_start = schema_entry.key().rfind("/", key_end - 1);
+            const std::string key = schema_entry.key().substr(key_start + 1, key_end - key_start - 1);
+            const auto key_ptr = ecb::yj_common::generate_json_pointer(key);
+
+            if ((json.contains(key_ptr)) == false || (json[key_ptr].is_number() == false))
+                continue;
+
+            if (isMax == true)
+            {
+                // max
+                if (json[key_ptr] > schema_entry.value())
+                {
+                    snprintf(throw_msg, sizeof(throw_msg), "key: %s is greater than maximum value defined in schema",
+                        key.c_str());
+                    throw std::runtime_error(throw_msg);
+                }
+            }
+            else
+            {
+                // min
+                if (json[key_ptr] < schema_entry.value())
+                {
+                    snprintf(throw_msg, sizeof(throw_msg), "key: %s is less than minimum value defined in schema",
+                        key.c_str());
+                    throw std::runtime_error(throw_msg);
+                }
+            }
+        }
+    }
+}
+
+void
 ecb::YjSchema::remove_undefined_keys(nlohmann::json& cfg_data)
 {
     auto flatten_cfg_data = cfg_data.flatten();
@@ -189,6 +233,7 @@ ecb::YjSchema::add_schema_default_values(
             auto key = ecb::yj_common::cfg_key_to_json_key_string(identifier_key);
 
             std::string key_prefix = "";
+
             if (schema_.contains(key))
                 key_prefix = schema_[key];
 

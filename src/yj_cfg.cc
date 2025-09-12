@@ -64,7 +64,7 @@ ecb::YjConfiguration::build(
     // pre-eval axis.type
     if (selected_schema == "axis")
         OBJ_schema.add_default_value_from_key(cfg_data, "axis.type");
-    else if ( (selected_schema == "plc") || (selected_schema == "encoder") )
+    else if ((selected_schema == "plc") || (selected_schema == "encoder"))
         cfg_data["/meta/schemaNumber"_json_pointer] = 0;
 
     OBJ_schema.normalize(cfg_data);
@@ -72,9 +72,11 @@ ecb::YjConfiguration::build(
     OBJ_schema.add_schema_default_values(cfg_data);
     OBJ_schema.check_datatypes(cfg_data);
     OBJ_schema.normalize(cfg_data);
+
     if (selected_schema == "axis")
         cfg_data["/meta/schemaNumber"_json_pointer] = cfg_data["/axis/type"_json_pointer];
-    // TODO: add function to check for allowed values
+
+    OBJ_schema.check_min_max_ranges(cfg_data);
     OBJ_schema.check_schema(selected_schema, cfg_data);
     OBJ_schema.check_for_valid_keys(cfg_data);
     OBJ_schema.remove_undefined_keys(cfg_data);

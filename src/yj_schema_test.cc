@@ -1005,3 +1005,194 @@ TEST_F(YjSchemaFixture, check_schema_ignore_keys_disabled)
     j1["/var2/a"_json_pointer] = 42;
     EXPECT_ANY_THROW(dut1.check_for_valid_keys(j1));
 }
+
+TEST_F(YjSchemaFixture, check_min_range_integer)
+{
+    schema.str(R"(
+      {
+        "testSchema": {
+          "schema": {
+            "a.b": {"type": "integer", "min": 1}
+          }
+        }
+      })"
+    );
+
+    auto dut1 = YjSchema(schema, "");
+
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 2;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 1;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 0;
+    EXPECT_ANY_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = -1;
+    EXPECT_ANY_THROW(dut1.check_min_max_ranges(j1));
+}
+
+TEST_F(YjSchemaFixture, check_min_range_float)
+{
+    schema.str(R"(
+      {
+        "testSchema": {
+          "schema": {
+            "a.b": {"type": "float", "min": 1}
+          }
+        }
+      })"
+    );
+
+    auto dut1 = YjSchema(schema, "");
+
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 2;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 1;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 0;
+    EXPECT_ANY_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = -1;
+    EXPECT_ANY_THROW(dut1.check_min_max_ranges(j1));
+}
+
+TEST_F(YjSchemaFixture, check_min_range_string)
+{
+    schema.str(R"(
+      {
+        "testSchema": {
+          "schema": {
+            "a.b": {"type": "float", "min": 1}
+          }
+        }
+      })"
+    );
+
+    auto dut1 = YjSchema(schema, "");
+
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "2";
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "1";
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "0";
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "-1";
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+}
+
+TEST_F(YjSchemaFixture, check_max_range_integer)
+{
+    schema.str(R"(
+      {
+        "testSchema": {
+          "schema": {
+            "a.b": {"type": "integer", "max": 10}
+          }
+        }
+      })"
+    );
+
+    auto dut1 = YjSchema(schema, "");
+
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 2;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 10;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 11;
+    EXPECT_ANY_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = -1;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+}
+
+TEST_F(YjSchemaFixture, check_max_range_float)
+{
+    schema.str(R"(
+      {
+        "testSchema": {
+          "schema": {
+            "a.b": {"type": "float", "max": 10}
+          }
+        }
+      })"
+    );
+
+    auto dut1 = YjSchema(schema, "");
+
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 2.0;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 10.0;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 11.0;
+    EXPECT_ANY_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = -1.0;
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+}
+
+TEST_F(YjSchemaFixture, check_max_range_string)
+{
+    schema.str(R"(
+      {
+        "testSchema": {
+          "schema": {
+            "a.b": {"type": "float", "max": 10}
+          }
+        }
+      })"
+    );
+
+    auto dut1 = YjSchema(schema, "");
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "2";
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "10";
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "11";
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "-1";
+    EXPECT_NO_THROW(dut1.check_min_max_ranges(j1));
+}

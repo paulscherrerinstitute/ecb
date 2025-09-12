@@ -86,7 +86,7 @@ public:
         nlohmann::json& cfg_data);
 
 
-    // Ths function checks all required and optional schemas defined
+    // This function checks all required and optional schemas defined
     // for `selected_schema`. The check ensures that all `required` keys
     // are defined and all `dependencies` are fulfilled. If any condition
     // is not met, the function throws an exception. If all conditions are
@@ -107,6 +107,11 @@ public:
     //
     void normalize(nlohmann::json& json);
 
+    // This function checks if the value of a key is within the
+    // defined min or max values. If not, an exception is thrown. The check
+    // is only performed if the value of the key is of type integer or float;
+    // otherwise the check is skipped.
+    void check_min_max_ranges(nlohmann::json& json);
 
     // Removes entries in 'cfg_data' that are not defined in the schema. For
     // example, if the configuration contains a drive section but the axis is
@@ -126,7 +131,7 @@ private:
     std::string grand_schema_;
     std::vector<std::pair<std::string, bool>> all_schemas_;
     std::vector<std::string> used_schemas_;
-
+    char throw_msg[350];
 
     // Checks if the given key is an incomplete key in `cfg_data`. Returns true of the key is
     // incomplete, otherwise false. An incomplete key is a key that can have

@@ -240,6 +240,7 @@ ecb::YjYaml::handle_plc_section(json& json)
 
     // if plc.file and plc.code are defined
     auto plc_code_ptr = json::json_pointer("/plc/code");
+
     if (json.contains(plc_code_ptr) && is_valid_plc_file)
     {
         std::vector<std::string> plc_code_yaml = json[plc_code_ptr];
@@ -254,7 +255,7 @@ ecb::YjYaml::handle_plc_section(json& json)
     // update plc.code if something changed
     if (plc_code.size() > 0)
     {
-        if ( is_valid_plc_file || (json.contains(plc_code_ptr) && is_valid_plc_file))
+        if (is_valid_plc_file || (json.contains(plc_code_ptr) && is_valid_plc_file))
             json[plc_code_ptr] = plc_code;
     }
 }
