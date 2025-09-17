@@ -111,6 +111,8 @@ schema looks like this:
                 "required": false,
                 "dependencies": "test4.status",
                 "normalize": "(string=string) csv=CSV csp=CSP",
+                "min": 0,
+                "max": 10
               },
               "test.test2.id": {
                 "type": "integer",
@@ -155,6 +157,11 @@ schema looks like this:
       matches then the first normalization. Therefore `end effector` is
       normalized to 2.
     - `(string=boolean) yes=true no=false` string to bool normalization
+- `min`: defines the minum allowed value. This check is only applied if the
+  datatype of the specified key (e.g. `test.test2.type`) is `integer` or
+  `float`. For other datatypes, the check is skipped. If the value is smaller
+  than `min`, ecb quits with an error.
+- `max`: same as `min`, but defines a maximum allowed value.
 
 
 templates
@@ -228,7 +235,9 @@ ECB adds basic support for the `is` keyword, which is not supported by Inja:
 ## metadata
 ECB automatically adds the following key/value pairs:
 
-- `ecb`: signalizes that ECB is used. The value is always `true`
-- `ecbVersion:" version of ECB in sematic versioning format (e.g. 1.0.0).
-- `ecbBuild`: the build number of ECB, which is a decimal number and easier to
+- `meta.ecb`: signalizes that ECB is used. The value is always `true`
+- `meta.ecbVersion:` version of ECB in sematic versioning format (e.g. 1.0.0).
+- `meta.ecbBuild`: the build number of ECB, which is a decimal number and easier to
   use in template files compared to `ecbVersion`.
+- `meta.schemaNumber`: is set to 0 if the grand schema is either `encoder` or
+  `plc`. If the grand schema is `axis`, the number is equal to `axis.type`.

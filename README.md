@@ -60,5 +60,6 @@ and template directory and compares the output of both.
     ./compare_ecb_jinja yaml/pax1.yaml axis
     ./compare_ecb_jinja yaml/vax1.yaml axis
     ./compare_ecb_jinja yaml/openloop.yaml enc
+    ./compare_ecb_jinja yaml/plc1.yaml plc
 
 please adapt paths in `compare_ecb_jinja` to fit your setup.
