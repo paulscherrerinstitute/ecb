@@ -10,7 +10,6 @@
    + Manage dependencies between keys
    + Allow required/optional keys and schemas/subschemas
    + Restrict integer/float values by defining min/max values
-   + Define min/max values for 
    + Normalization of values (yes/no => true/false, "real" => 1, "virtual" => 2)
    + Typo detection by only permitting keys that match the schema definition
 + Support for YAML variables (not recommended, just for backwards compatibility)
