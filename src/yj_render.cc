@@ -17,6 +17,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <inja.hpp>
+#include <iostream>
 #include <iterator>
 #include <regex>
 
@@ -52,7 +53,7 @@ ecb::YjRender::render(
         preprocess_line(line, preprocessed_template, template_dir, flatten_data, 1);
 
     preprocessed_template.pop_back(); // remove last newline
-    std::string rendered_template = "";
+    std::string rendered_template = {};
 
     try
     {
@@ -163,7 +164,7 @@ found:
 
     split.erase(iter, iter_end);
 
-    line = "";
+    line = {};
 
     for (auto it = split.cbegin() ; it != split.cend(); ++it)
     {

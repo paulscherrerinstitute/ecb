@@ -17,6 +17,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <json.hpp>
+#include <iostream>
 
 #include "yj_cfg.h"
 #include "yj_render.h"
@@ -29,8 +30,7 @@ ecb::YjConfiguration::read_key(
     const std::string& key)
 {
     auto OBJ_yaml = ecb::YjYaml();
-    std::string value = "";
-    value = OBJ_yaml.read_yaml_key(filename_yaml, key);
+    std::string value =  OBJ_yaml.read_yaml_key(filename_yaml, key);
     return value;
 }
 
@@ -41,8 +41,7 @@ ecb::YjConfiguration::update_key(
     const std::string& value)
 {
     auto OBJ_yaml = ecb::YjYaml();
-    std::string ret_val = "";
-    ret_val = OBJ_yaml.update_yaml_key(filename_yaml, key, value);
+    std::string ret_val = OBJ_yaml.update_yaml_key(filename_yaml, key, value);
     return ret_val;
 }
 

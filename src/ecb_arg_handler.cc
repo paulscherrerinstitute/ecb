@@ -129,7 +129,7 @@ ArgHandler::set_argument(std::string_view arg, std::string_view value)
 std::string
 ArgHandler::get_yj_yaml_filename(void)
 {
-    std::string ret_val = "";
+    std::string ret_val = {};
 
     if (auto it = args_.find("--yaml") ; it != args_.end())
         ret_val = args_["--yaml"];
@@ -140,7 +140,7 @@ ArgHandler::get_yj_yaml_filename(void)
 std::string
 ArgHandler::get_output_filename(void)
 {
-    std::string ret_val = "";
+    std::string ret_val = {};
 
     if (auto it = args_.find("--output") ; it != args_.end())
         ret_val = args_["--output"];
@@ -152,7 +152,7 @@ ArgHandler::get_output_filename(void)
 std::string
 ArgHandler::get_yj_key_value(void)
 {
-    std::string ret_val = "";
+    std::string ret_val = {};
 
     if (auto it = args_.find("--key") ; it != args_.end())
         ret_val = args_["--key"];
@@ -163,7 +163,7 @@ ArgHandler::get_yj_key_value(void)
 std::string
 ArgHandler::get_yj_value(void)
 {
-    std::string ret_val = "";
+    std::string ret_val = {};
 
     if (auto it = args_.find("--value") ; it != args_.end())
         ret_val = args_["--value"];
@@ -174,7 +174,7 @@ ArgHandler::get_yj_value(void)
 std::string
 ArgHandler::get_yj_schema_filename(void)
 {
-    std::string ret_val = "";
+    std::string ret_val = {};
 
     if (auto it = args_.find("--schemafile") ; it != args_.end())
         ret_val = args_["--schemafile"];
@@ -185,7 +185,7 @@ ArgHandler::get_yj_schema_filename(void)
 std::string
 ArgHandler::get_yj_schema(void)
 {
-    std::string ret_val = "";
+    std::string ret_val = {};
 
     if (auto it = args_.find("--schema") ; it != args_.end())
         ret_val = args_["--schema"];
@@ -196,7 +196,7 @@ ArgHandler::get_yj_schema(void)
 std::string
 ArgHandler::get_yj_template_filename(void)
 {
-    std::string ret_val = "";
+    std::string ret_val = {};
 
     if (auto it = args_.find("--template") ; it != args_.end())
         ret_val = args_["--template"];
@@ -207,7 +207,7 @@ ArgHandler::get_yj_template_filename(void)
 std::string
 ArgHandler::get_yj_template_dir(void)
 {
-    std::string ret_val = "";
+    std::string ret_val = {};
 
     if (auto it = args_.find("--templatedir") ; it != args_.end())
         ret_val = args_["--templatedir"];

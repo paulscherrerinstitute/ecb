@@ -427,7 +427,6 @@ ecb::YjSchema::check_for_valid_keys(
     nlohmann::json& cfg_data)
 {
     const auto flatten_cfg_data = cfg_data.flatten();
-    std::smatch match;
     std::string actual_cfg_key;
     std::string actual_schema_key;
     std::vector<std::string> valid_subkeys;
