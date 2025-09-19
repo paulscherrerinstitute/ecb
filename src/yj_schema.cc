@@ -556,7 +556,7 @@ ecb::YjSchema::is_incomplete_key(
 
     for (const auto& cfg_entry : flatten_cfg_data.items())
     {
-        if (cfg_entry.key().find(id) != std::string::npos)
+        if (cfg_entry.key().find(id) == 0)
         {
             is_found = true;
             break;
