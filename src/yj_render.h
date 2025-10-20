@@ -96,12 +96,22 @@ private:
         const std::map<std::string, nlohmann::json>& data);
 
 
-    //
-    //
-    //
+    // Replaces all occurrences of `K|default(X)|int` with `default(K, X)` in
+    // the given line. ECMC functions that except numbers can handle int and
+    // float, so it is safe to remove the cast. If `K` is a bool, then true is
+    // converted to 1 and false to 0. If no occurrences are found, the line
+    // remains unchanged.
     void transform_default_int_cast(
         std::string& line,
         const std::map<std::string, nlohmann::json>& data);
+
+
+    // Replaces all occurrences of `K|default(X)|float` with `default(K, X)` in
+    // the given line. ECMC functions that except numbers can handle int and
+    // float, so it is safe to remove the cast. If no occurrences are
+    // found, the line remains unchanged.
+    void transform_default_float_cast(
+        std::string& line);
 
 
     // Replaces all occurrences of `is defined` or `is not defined` in the

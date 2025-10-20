@@ -262,6 +262,22 @@ ecb::YjRender::transform_default_int_cast(
 }
 
 void
+ecb::YjRender::transform_default_float_cast(
+    std::string& line)
+{
+    const auto REGEX_find_default_float_pipe = std::regex(R"(((default\((.+?),(.+?)\))\|float))");
+    const auto REGEX_replace_default_float_pipe = std::regex(R"(default\(.+?\)\|float)");
+
+    for (std::smatch match ; std::regex_search(line, match, REGEX_find_default_float_pipe);)
+    {
+        std::string replace_text = match[2];
+
+        line = std::regex_replace(line, REGEX_replace_default_float_pipe, replace_text,
+                std::regex_constants::format_first_only);
+    }
+}
+
+void
 ecb::YjRender::remove_float_cast(std::string& line)
 {
     const auto REGEX_find_float_cast = std::regex(R"(([\w.]+)(?=\|float))");
@@ -340,7 +356,10 @@ ecb::YjRender::preprocess_line(std::string& line,
             transform_default_int_cast(line, flatten_data);
 
         if (line.find("|float") != std::string::npos)
+        {
+            transform_default_float_cast(line);
             remove_float_cast(line);
+        }
 
         yj_common::remove_whitespaces(line);
 
