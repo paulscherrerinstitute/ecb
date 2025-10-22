@@ -59,12 +59,13 @@ private:
         const std::string& template_dir,
         const std::map<std::string, nlohmann::json>& flatten_data, int call_count);
 
-    // Replaces all occurrences of `K|float` with `K` in the given line. Casts
-    // to float are not needed and because Inja do not support pipe operations
-    // it is just removed. If no occurrences are found, the line remains
-    // unchanged.
-    void remove_float_cast(
-        std::string& line);
+
+    // Replaces all occurrences of `K|float` with `K` in the given line. If K
+    // is a number then it is casted to a float, otherwise it is left
+    // unchanged. If no occurrences are found, the line remains unchanged.
+    void transform_float_cast(
+        std::string& line,
+        const std::map<std::string, nlohmann::json>& data);
 
 
     // Remove leading and trailing whitespaces from line.
@@ -107,11 +108,12 @@ private:
 
 
     // Replaces all occurrences of `K|default(X)|float` with `default(K, X)` in
-    // the given line. ECMC functions that except numbers can handle int and
-    // float, so it is safe to remove the cast. If no occurrences are
-    // found, the line remains unchanged.
+    // the given line. If X is a number it is casted to a float, otherwise
+    // leave unchanged. If no occurrences are found, the line remains
+    // unchanged.
     void transform_default_float_cast(
-        std::string& line);
+        std::string& line,
+        const std::map<std::string, nlohmann::json>& data);
 
 
     // Replaces all occurrences of `is defined` or `is not defined` in the

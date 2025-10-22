@@ -335,7 +335,7 @@ TEST_F(YjRenderFixture, remove_floatCast_one)
 
     j1["/keya/1"_json_pointer] = 2;
     input.str("ecmcConfigOrDie(XYDWD, {{keya.1|float}})");
-    expect = "ecmcConfigOrDie(XYDWD, 2)";
+    expect = "ecmcConfigOrDie(XYDWD, 2.0)";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -347,7 +347,7 @@ TEST_F(YjRenderFixture, remove_floatCast_two)
     j1["/keya/2"_json_pointer] = 8;
 
     input.str("ecmcConfigOrDie(XYDWD, {{keya.1|float}}, {{keya.2|float}})");
-    expect = "ecmcConfigOrDie(XYDWD, 2, 8)";
+    expect = "ecmcConfigOrDie(XYDWD, 2.0, 8.0)";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
