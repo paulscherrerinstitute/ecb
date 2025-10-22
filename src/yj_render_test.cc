@@ -45,7 +45,7 @@ TEST_F(YjRenderFixture, replace_isDefined_oneKeyExists)
 {
     j1["/key1/a"_json_pointer] = true;
     input.str("{% if key1.a is defined %}\nOK\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -54,7 +54,7 @@ TEST_F(YjRenderFixture, replace_isDefined_oneKeyExists)
 TEST_F(YjRenderFixture, replace_isDefined_oneKeyDoNotExist)
 {
     input.str("{% if (key1.a is defined) %}\nFALSE{% else %}\nOK\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -65,7 +65,7 @@ TEST_F(YjRenderFixture, replace_isDefined_testIncompleteKey)
     j1["/key1/a/b"_json_pointer] = false;
 
     input.str("{%- if (key1.a is defined) %}\nOK\n{% else %}\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -77,7 +77,7 @@ TEST_F(YjRenderFixture, replace_isDefined_twoKeys_bothTrue)
     j1["/key2/a"_json_pointer] = false;
 
     input.str("{%- if (key1.a is defined) and (key2.a is defined) %}\nOK\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -88,7 +88,7 @@ TEST_F(YjRenderFixture, replace_isDefined_twoKeys_oneFalse)
     j1["/key1/a"_json_pointer] = false;
 
     input.str("{%- if (key1.a is defined) and (key2.a is defined) %}\nFALSE\n{% else %}\nOK\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -109,7 +109,7 @@ TEST_F(YjRenderFixture, replace_isNotDefined_oneKeyExists)
     j1["/key1/a"_json_pointer] = "def";
 
     input.str("{%- if (key1.a is not defined) %}\nFALSE\n{% else %}\nOK\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -118,7 +118,7 @@ TEST_F(YjRenderFixture, replace_isNotDefined_oneKeyExists)
 TEST_F(YjRenderFixture, replace_isNotDefined_oneKeyDoNotExist)
 {
     input.str("{%- if key1.a is not defined %}\nOK\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -129,7 +129,7 @@ TEST_F(YjRenderFixture, replace_isNotDefined_testIncompleteKey)
     j1["/key2/a/b"_json_pointer] = false;
 
     input.str("{%- if (key2.a is not defined) %}\nFALSE\n{% else %}\nOK\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -140,7 +140,7 @@ TEST_F(YjRenderFixture, replace_isNotDefined_testTwoKeys)
     j1["/key2/a"_json_pointer] = 0;
 
     input.str("{%- if (key1.a is not defined) and (key2.a is not defined) %}\nFALSE{% else %}\nOK\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -161,7 +161,7 @@ TEST_F(YjRenderFixture, replace_isString_one)
 
     input.str("{%- if (key1.a is string) %}\nOK\n{% endif %}");
 
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -174,7 +174,7 @@ TEST_F(YjRenderFixture, replace_isString_two)
 
     input.str("{% if (key1.a is string) and (key2.a is string) %}\nFALSE\n{% else %}\nOK\n{% endif %}");
 
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -204,7 +204,7 @@ TEST_F(YjRenderFixture, replace_loopIndex0_one)
 
     const char* expectData =
         "ecmcConfigOrDie \"Cfg.LinkEcEntryToObject(0,ax0.drv.alarm0\")"
-        "\necmcConfigOrDie \"Cfg.LinkEcEntryToObject(0,ax0.drv.alarm1\")\n";
+        "\necmcConfigOrDie \"Cfg.LinkEcEntryToObject(0,ax0.drv.alarm1\")";
 
     expect = std::string(expectData);
     result = dut1.render(input, "", j1);
@@ -229,7 +229,7 @@ TEST_F(YjRenderFixture, replace_intCast_oneInteger)
     j1["/key1/a"_json_pointer] = 2;
 
     input.str("{%- if key1.a|int == 2 %}\nOK\n{% else %}\nFALSE\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
@@ -241,7 +241,7 @@ TEST_F(YjRenderFixture, replace_intCast_twoCasts)
     j1["/key2/a"_json_pointer] = 5;
 
     input.str("{%- if key1.a|int and key2.a|int %}\nOK\n{% endif %}");
-    expect = "OK\n";
+    expect = "OK";
 
     result = dut1.render(input, "", j1);
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;

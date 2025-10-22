@@ -52,7 +52,6 @@ ecb::YjRender::render(
     while (std::getline(template_content, line))
         preprocess_line(line, preprocessed_template, template_dir, flatten_data, 1);
 
-    preprocessed_template.pop_back(); // remove last newline
     std::string rendered_template = {};
 
     try
@@ -102,6 +101,10 @@ ecb::YjRender::render(
                 (stop_index - start_index)) << std::endl;
         throw e;
     }
+
+    // remove last newline if it exists
+    if (!rendered_template.empty() && rendered_template[rendered_template.length() - 1] == '\n')
+        rendered_template.erase(rendered_template.length() - 1);
 
     return rendered_template;
 }
@@ -329,6 +332,7 @@ ecb::YjRender::preprocess_line(std::string& line,
 
         return;
     }
+
 
 
     if (line.find("include") != std::string::npos)

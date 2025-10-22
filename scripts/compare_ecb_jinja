@@ -81,5 +81,5 @@ sed -i '/^\s*$/d' result_jinja2.txt
 #sed -i 's/^[ \t]*//' result_cpp.txt
 sed -i 's/^[ \t]*//' result_jinja2.txt
 
-#diff --ignore-case -By --color=always  --suppress-common-lines  result_cpp.txt result_jinja2.txt
-vimdiff -o "$script_root/result_cpp.txt" "$script_root/result_jinja2.txt"
+#vimdiff -o "$script_root/result_cpp.txt" "$script_root/result_jinja2.txt"
+diff "$script_root/result_cpp.txt" "$script_root/result_jinja2.txt"
