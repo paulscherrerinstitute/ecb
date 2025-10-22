@@ -359,6 +359,28 @@ TEST_F(YjRenderFixture, remove_floatCast_wrongCase)
     EXPECT_ANY_THROW(dut1.render(input, "", j1));
 }
 
+TEST_F(YjRenderFixture, remove_floatDefaultCast_one)
+{
+
+    j1["/keya/1"_json_pointer] = 2;
+    input.str("ecmcConfigOrDie(XYDWD, {{keya.1|default(1.0)|float}})");
+    expect = "ecmcConfigOrDie(XYDWD, 2.0)";
+
+    result = dut1.render(input, "", j1);
+    EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
+}
+
+TEST_F(YjRenderFixture, remove_floatDefaultCast_two)
+{
+
+    //j1["/keya/1"_json_pointer] = 2;
+    input.str("ecmcConfigOrDie(XYDWD, {{keya.1|default(1.0)|float}})");
+    expect = "ecmcConfigOrDie(XYDWD, 1.0)";
+
+    result = dut1.render(input, "", j1);
+    EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
+}
+
 TEST_F(YjRenderFixture, readTemplate)
 {
     j1["/key1/a"_json_pointer] = 2;
