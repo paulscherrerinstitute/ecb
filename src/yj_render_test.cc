@@ -330,7 +330,7 @@ TEST_F(YjRenderFixture, replace_default_wrongCase)
     EXPECT_ANY_THROW(dut1.render(input, "", j1));
 }
 
-TEST_F(YjRenderFixture, remove_floatCast_one)
+TEST_F(YjRenderFixture, replace_floatCast_one)
 {
 
     j1["/keya/1"_json_pointer] = 2;
@@ -341,7 +341,7 @@ TEST_F(YjRenderFixture, remove_floatCast_one)
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
 }
 
-TEST_F(YjRenderFixture, remove_floatCast_two)
+TEST_F(YjRenderFixture, replace_floatCast_two)
 {
     j1["/keya/1"_json_pointer] = 2;
     j1["/keya/2"_json_pointer] = 8;
@@ -353,13 +353,13 @@ TEST_F(YjRenderFixture, remove_floatCast_two)
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
 }
 
-TEST_F(YjRenderFixture, remove_floatCast_wrongCase)
+TEST_F(YjRenderFixture, replace_floatCast_wrongCase)
 {
     input.str("ecmcConfigOrDie(XYDWD, {{keya.1|Float}}");
     EXPECT_ANY_THROW(dut1.render(input, "", j1));
 }
 
-TEST_F(YjRenderFixture, remove_floatDefaultCast_one)
+TEST_F(YjRenderFixture, replace_floatDefaultCast_one)
 {
 
     j1["/keya/1"_json_pointer] = 2;
@@ -370,7 +370,7 @@ TEST_F(YjRenderFixture, remove_floatDefaultCast_one)
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
 }
 
-TEST_F(YjRenderFixture, remove_floatDefaultCast_two)
+TEST_F(YjRenderFixture, replace_floatDefaultCast_two)
 {
 
     //j1["/keya/1"_json_pointer] = 2;
@@ -378,6 +378,28 @@ TEST_F(YjRenderFixture, remove_floatDefaultCast_two)
     expect = "ecmcConfigOrDie(XYDWD, 1.0)";
 
     result = dut1.render(input, "", j1);
+    EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
+}
+
+TEST_F(YjRenderFixture, replace_floatDefaultCast_three)
+{
+
+    //j1["/keya/1"_json_pointer] = 2;
+    input.str("ecmcConfigOrDie(XYDWD, {{keya.1|default(10)}}, TEST_ABC=${}, {{ keya.1|default(1)|float }})");
+    expect = "ecmcConfigOrDie(XYDWD, 10, TEST_ABC=${}, 1.0)";
+
+    result = dut1.render(input, "", j1);
+    EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
+}
+
+TEST_F(YjRenderFixture, replace_floatDefaultCast_four)
+{
+    j1["/trajectory/type"_json_pointer] = 1;
+    input.str("AXIS_TYPE={{  axis.type|default(10)|float }},DRV_TYPE={{ drive.type|default(0)|float }},TRAJ_TYPE={{ trajectory.type }}");
+    expect = "AXIS_TYPE=10.0,DRV_TYPE=0.0,TRAJ_TYPE=1";
+
+    result = dut1.render(input, "", j1);
+    std::cout << "RESULT: " << result << std::endl;
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
 }
 
@@ -448,6 +470,26 @@ TEST_F(YjRenderFixture, default_int_bool_undefined)
     expect = "ecmcConfigOrDie(XYDWD, 1)";
 
     result = dut1.render(input, "", j1);
+    EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
+}
+
+TEST_F(YjRenderFixture, default_int_one)
+{
+    input.str("ecmcConfigOrDie(XYDWD, {{keya.1|default(10)}}, TEST_ABC=${}, {{ keya.1|default(1)|int }})");
+    expect = "ecmcConfigOrDie(XYDWD, 10, TEST_ABC=${}, 1)";
+
+    result = dut1.render(input, "", j1);
+    EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
+}
+
+TEST_F(YjRenderFixture, default_int_two)
+{
+    j1["/trajectory/type"_json_pointer] = 1;
+    input.str("AXIS_TYPE={{  axis.type|default(10)|int }},DRV_TYPE={{ drive.type|default(0)|int }},TRAJ_TYPE={{ trajectory.type }}");
+    expect = "AXIS_TYPE=10,DRV_TYPE=0,TRAJ_TYPE=1";
+
+    result = dut1.render(input, "", j1);
+    std::cout << "RESULT: " << result << std::endl;
     EXPECT_EQ(result.compare(expect), 0) << "result is: " << result;
 }
 

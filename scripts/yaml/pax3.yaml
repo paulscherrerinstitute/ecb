@@ -2,6 +2,10 @@ axis:
   id: 6
   mode: CSV
   #parameters: powerAutoOnOff=2;powerOnDelay=6.0;powerOffDelay=1.0;
+  autoEnable:
+    enableTimeout: 12.3
+    disableTimeout: 10.0
+    atStartup: true
 
 epics:
   name: TRY2

@@ -15,6 +15,9 @@ epics:
     enable: true
     description: "HFM Y3 Downtream at Wall"
     fieldInit: "SPAM=0,RTRY=1,FOFF=Frozen,TWV=0.1"
+    pvt:
+      npoints: 10
+      nreadback: 20
 
 drive:
   numerator: 0.25               #

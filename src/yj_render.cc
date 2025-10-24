@@ -209,8 +209,8 @@ ecb::YjRender::transform_default(std::string& line)
 
     for (std::smatch match ; std::regex_search(line, match, REGEX_find_default_pipe);)
     {
-        const std::string replace_text = "default(" + match[1].str() + ", " +
-            match[2].str() + ")";
+        const std::string replace_text = "default(" + match[1].str() + ", " + match[2].str() + ")";
+
         line = std::regex_replace(line, REGEX_replace_default_pipe, replace_text,
                 std::regex_constants::format_first_only);
     }
@@ -240,15 +240,15 @@ void
 ecb::YjRender::transform_default_int_cast(
     std::string& line, const std::map<std::string, nlohmann::json>& data)
 {
-    const auto REGEX_find_default_int_pipe = std::regex(R"(((default\((.+?),(.+?)\))\|int))");
-    const auto REGEX_replace_default_int_pipe = std::regex(R"(default\(.+?\)\|int)");
+    const auto REGEX_find_default_int_pipe = std::regex(R"(([a-zA-Z0-9_\.]+)\|default\(([0-9A-Za-z$\{\}\(\)\.]+)(?=\)\|int))");
+    const auto REGEX_replace_default_int_pipe = std::regex(R"([a-zA-Z0-9_\.]+\|default\([0-9A-Za-z$\{\}\(\)\.]+\|int)");
 
     for (std::smatch match ; std::regex_search(line, match, REGEX_find_default_int_pipe);)
     {
-        std::string replace_text = match[2];
+        std::string replace_text = "default(" + match[1].str() + ", " + match[2].str() + ")";
 
         // check if found key is a boolean
-        const std::string found_key = ecb::yj_common::cfg_key_to_json_key_string(match[3].str());
+        const std::string found_key = ecb::yj_common::cfg_key_to_json_key_string(match[1].str());
 
         if (auto it = data.find(found_key); (it != data.end()) && (it->second.is_boolean()))
         {
@@ -268,20 +268,32 @@ void
 ecb::YjRender::transform_default_float_cast(
     std::string& line, const std::map<std::string, nlohmann::json>& data)
 {
-    const auto REGEX_find_default_float_pipe = std::regex(R"(((default\((.+?),(.+?)\))\|float))");
-    const auto REGEX_replace_default_float_pipe = std::regex(R"(default\(.+?\)\|float)");
+    const auto REGEX_find_default_float_pipe = std::regex(R"(([a-zA-Z0-9_\.]+)\|default\(([0-9A-Za-z$\{\}\(\)\.]+)(?=\)\|float))");
+    const auto REGEX_replace_default_float_pipe = std::regex(R"([a-zA-Z0-9_\.]+\|default\([0-9A-Za-z$\{\}\(\)\.]+\|float)");
 
     for (std::smatch match ; std::regex_search(line, match, REGEX_find_default_float_pipe);)
     {
-        std::string replace_text = match[2];
+        double temp_default_value = 0;
+
+        try
+        {
+            temp_default_value = std::stod(match[2].str());
+        }
+        catch(...)
+        {
+            std::cout << "transform_default_float_cast: cannot cast string to double" << std::endl;
+        }
+
+        std::string default_value = std::to_string(temp_default_value);
+        std::string replace_text = "default(" + match[1].str() + ", " + default_value + ")";
 
         // check if found key is a number
-        const std::string found_key = ecb::yj_common::cfg_key_to_json_key_string(match[3].str());
+        const std::string found_key = ecb::yj_common::cfg_key_to_json_key_string(match[1].str());
 
         if (auto it = data.find(found_key); (it != data.end()) && (it->second.is_number()))
         {
-            double x = it->second.get<float>();
-            replace_text = std::to_string(x);
+            double temp_value = it->second.get<double>();
+            replace_text = std::to_string(temp_value);
         }
 
         line = std::regex_replace(line, REGEX_replace_default_float_pipe, replace_text,
@@ -358,7 +370,7 @@ ecb::YjRender::preprocess_line(std::string& line,
     {
         bool contains_default = false;
 
-        if (line.find(R"(default)") != std::string::npos)
+        if (line.find(R"(|default)") != std::string::npos)
             contains_default = true;
 
         if (line.find(R"(is)") != std::string::npos)
@@ -374,12 +386,6 @@ ecb::YjRender::preprocess_line(std::string& line,
             transform_loop_index0(line);
 
         if (contains_default)
-            transform_default(line);
-
-        if (line.find("|int") != std::string::npos)
-            transform_int_cast(line, flatten_data);
-
-        if (contains_default)
             transform_default_int_cast(line, flatten_data);
 
         if (line.find("|float") != std::string::npos)
@@ -387,6 +393,12 @@ ecb::YjRender::preprocess_line(std::string& line,
             transform_default_float_cast(line, flatten_data);
             transform_float_cast(line, flatten_data);
         }
+
+        if (contains_default)
+            transform_default(line);
+
+        if (line.find("|int") != std::string::npos)
+            transform_int_cast(line, flatten_data);
 
         yj_common::remove_whitespaces(line);
 

@@ -5,7 +5,6 @@ var:
 
 axis:
   id: $(AX_ID)
-  group: $(AX_GROUP)
   type: real
   mode: csv
   features:
