@@ -1,11 +1,13 @@
-RC
---
+v1.1.0
+------
 
++ better regex for `|default(X)`, `|default(X)|float`, and `default(X)|int`,
+  especially when they appear on the same line.
 
-+ jinja2 float casts are no longer just removed, but now 
-  really cast a number to a float.
++ jinja2 float casts are no longer simply removed. Casting a number to a float 
+  now works as intended.
 
-+ remove newline at the end of a rendered template
++ remove the newline at the end of the rendered template.
 
 
 v1.0.0 
