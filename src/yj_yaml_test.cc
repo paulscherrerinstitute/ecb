@@ -308,7 +308,7 @@ TEST_F(YjYamlFixture, readPlcFile)
 {
     const char* testYaml =
         "plc:\n"
-        "  file: scripts/templates/test.plc";
+        "  file: ../scripts/templates/test.plc";
 
     std::stringstream data;
     data << testYaml;
@@ -352,7 +352,7 @@ TEST_F(YjYamlFixture, readPlcFileAndCode)
 {
     const char* testYaml =
         "plc:\n"
-        "  file: scripts/templates/test.plc\n"
+        "  file: ../scripts/templates/test.plc\n"
         "  code:\n"
         "    - static.AB := 43|\n"
         "    - var:=static.AB / 12|";

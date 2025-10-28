@@ -29,18 +29,21 @@ See [doc/ecb.md](doc/ecb.md)
 - `make`, to build
 - git, for version numbering
 - (google test, for unit tests)
-- (astyle, for code formatting `make format`)
+- (astyle, for code formatting `make checkstyle`)
 
 to build ECB, just type:
 
     make clean
-    make 
+    make -j8
+
 
 ### tested compilers
-- g++ 8.5.0: does not work because of broken `std::filesystem` implementation 
+- g++ 8.3.0, 8.5.0: does not work because of broken `std::filesystem` implementation 
 - g++ 11.5.0: works
+- g++ 12.2.0: works
 - clang++ 18.1.8: works
 - clang++ 19.1.7: works
+
 
 ## testing
 
@@ -48,7 +51,8 @@ to build ECB, just type:
 
     # make unit tests (test_ecb)
     make test
-    ./test_ecb
+    cd ./bin
+    ./test_ecb_rhel
 
     # ecb debug version, disables compiler optimization
     make debug

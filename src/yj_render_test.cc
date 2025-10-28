@@ -409,7 +409,7 @@ TEST_F(YjRenderFixture, readTemplate)
     j1["/key2/a"_json_pointer] = 2;
 
     std::string output;
-    output = dut1.render("scripts/templates/file1.inja", "scripts/templates", j1);
+    output = dut1.render("../scripts/templates/file1.inja", "../scripts/templates", j1);
 
     std::string expect = "f1:A\nf2:A\nf3:A\nf2:B\nf1:B";
     EXPECT_EQ(output.compare(expect), 0);
@@ -417,7 +417,7 @@ TEST_F(YjRenderFixture, readTemplate)
 
 TEST_F(YjRenderFixture, include_ok)
 {
-    input.str(" {% include \'scripts/templates/file3.inja\' %}");
+    input.str(" {% include \'../scripts/templates/file3.inja\' %}");
     expect = "f3:A";
 
     result = dut1.render(input, ".", j1);
@@ -495,6 +495,6 @@ TEST_F(YjRenderFixture, default_int_two)
 
 TEST_F(YjRenderFixture, cyclicIncludes)
 {
-    EXPECT_THROW(dut1.render("scripts/templates/fileA.inja", "scripts/templates", j1),
+    EXPECT_THROW(dut1.render("../scripts/templates/fileA.inja", "../scripts/templates", j1),
         std::runtime_error);
 }

@@ -1,3 +1,11 @@
+v1.2.0
+------
+
++ speedup compilation and restructure Makefiles
+
++ fix version number
+
+
 v1.1.0
 ------
 
