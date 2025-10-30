@@ -1,6 +1,6 @@
 axis:
   id: 12
-  mode: CSV
+  mode: CSP_PC
   group: HFM_REAL
   #parameters: powerAutoOnOff=2;powerOnDelay=6.0;powerOffDelay=1.0;
   feedSwitchesOutput: ec${MASTER_ID}.s${BO_SID}.binaryOutput${BO_CH} # e
@@ -41,7 +41,16 @@ encoder:
   bits: 32              # Total bit count of encoder raw data
   absBits: 32           # Absolute bit count (for absolute encoders)
   absOffset: $(ENC_OFF) # Encoder offset in eng units (for absolute encoders)
+  control: $(MASTER_ID).s$(ENC_SID).control
+  status: $(MASTER_ID).s$(ENC_SID).status
   velocityFilterSize: 5
+  latch:
+    position: $(MASTER_ID).s$(ENC_SID).xxx
+    armCmd: 5
+    armBits: 3
+  lookuptable:
+    filename: test.abc
+    enable: true
 
 controller:
   Kp: 10.0

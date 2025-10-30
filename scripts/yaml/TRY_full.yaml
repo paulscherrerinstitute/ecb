@@ -50,6 +50,8 @@ encoder:
   control: ec$(ECMC_EC_MASTER_ID).s$(ENCODER_SLAVE).encoderControl$(ENCODER_CHANNEL)
   position: ec$(ECMC_EC_MASTER_ID).s$(ENCODER_SLAVE).positionActual$(ENCODER_CHANNEL)
   status: ec$(ECMC_EC_MASTER_ID).s$(ENCODER_SLAVE).encoderStatus$(ENCODER_CHANNEL)
+  primary: false
+  useAsCSPDrvEnc: true
   latch:
     position: "dd"
     control: 12

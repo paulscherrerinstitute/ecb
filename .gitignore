@@ -5,3 +5,4 @@ env
 ecb
 test_ecb
 *.o
+bin

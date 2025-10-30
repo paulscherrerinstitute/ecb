@@ -38,6 +38,8 @@ encoder:
   bits: 16             # Total bit count of encoder raw data
   absOffset: 0         # Encoder offset in eng units (for absolute encoders)
   position: ec0.s$(ENC_SLAVE).positionActual$(ENC_CHANNEL)
+  primary: yes
+  useAsCSPDrvEnc: no
 
 controller:
   Kp: 10

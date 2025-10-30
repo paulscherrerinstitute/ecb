@@ -45,6 +45,8 @@ encoder:
   absBits: 16           # Absolute bit count (for absolute encoders)
   absOffset: 0          # Encoder offset in eng units (for absolute encoders)
   position: ec$(MASTER_ID).s$(DRV_SLAVE).positionActual01
+  primary: 0
+  useAsCSPDrvEnc: 1
 
 controller:
   Kp: 1.0

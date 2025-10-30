@@ -62,7 +62,7 @@ cd "$script_root"
 # -----------------------------------------------------------------------------
 # run ecb
 # -----------------------------------------------------------------------------
-time ../ecb --yaml "$yaml_file" --templatedir "$ecmccfg_cpp/scripts/jinja2/templates" --template "$ecmccfg_cpp/scripts/jinja2/templates/$ecb_template" --schemafile "$ecmccfg_cpp/scripts/jinja2/ecbSchema.json" --schema "$ecb_schema" --output "$script_root/result_cpp.txt"
+time ../bin/ecb_rhel --yaml "$yaml_file" --templatedir "$ecmccfg_cpp/scripts/jinja2/templates" --template "$ecmccfg_cpp/scripts/jinja2/templates/$ecb_template" --schemafile "$ecmccfg_cpp/scripts/jinja2/ecbSchema.json" --schema "$ecb_schema" --output "$script_root/result_cpp.txt"
 
 #heaptrack ../ecb --yaml "$yaml_file" --templatedir "$ecmccfg_cpp/scripts/jinja2/templates" --template "$ecmccfg_cpp/scripts/jinja2/templates/$ecb_template" --schemafile "$ecmccfg_cpp/scripts/jinja2/ecbSchema.json" --schema "$ecb_schema" --output "$script_root/result_cpp.txt"
 
