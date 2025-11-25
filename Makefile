@@ -1,4 +1,4 @@
-VERSION = 1.2.0
+VERSION = 1.3.0
 
 ARCH ?= rhel
 
@@ -32,7 +32,7 @@ all: ecb
 
 ecb:
 	$(MAKE) -C src -f Makefile
-	mv src/ecb ./bin/ecb_$(ARCH)
+	mv src/ecb ./bin/ecb
 
 debug:
 	$(MAKE) -C src -f Makefile.DEBUG
