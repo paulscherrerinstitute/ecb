@@ -1,6 +1,6 @@
 CXXFLAGS +=-I../vendor -I../vendor/inja -I../vendor/rapidyaml
 CXXFLAGS +=-g -O0
-LIBS = -lpthread -lgtest -lgtest_main
+LDLIBS += -lpthread -lgtest -lgtest_main -lstdc++fs
 
 SRC := $(wildcard **.cc)
 SRC_TEST := $(filter-out ecb.cc, $(SRC))
@@ -8,4 +8,4 @@ SRC_TEST := $(filter-out ecb.cc, $(SRC))
 OBJS=$(SRC_TEST:.cc=.o)
 
 test_ecb: $(OBJS)
-	$(CXX) $(CXXFLAGS) $(LIBS) $(BUILD_INFO) $(OBJS) -o test_ecb
+	$(CXX) $(CXXFLAGS) $(LIBS) $(BUILD_INFO) $(OBJS) $(LDLIBS) -o test_ecb

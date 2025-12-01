@@ -1,5 +1,6 @@
 CXXFLAGS +=-I../vendor -I../vendor/inja -I../vendor/rapidyaml
 CXXFLAGS +=-g -O0
+LDLIBS += -lstdc++fs
 
 SRC := $(wildcard **.cc)
 SRC_EXE:=$(filter-out $(wildcard *_test.cc), $(SRC))

@@ -1,9 +1,14 @@
-# ecb - ecmc configuration builder
+# ECB - ECMC configuration builder
+
+*ECB* is a command-line tool designed to simplify the creation and validation of
+configurations for [ECMC](https://github.com/epics-modules/ecmc) using
+[ECMCCFG](https://github.com/paulscherrerinstitute/ecmccfg). It leverages YAML
+for configuration, provides robust data validation features, and aims to
+streamline the ECMC setup process.
+
 
 ## Features
 
-+ Use YAML to configure [ECMC](https://github.com/epics-modules/ecmc) with
-  [ECMCCFG](https://github.com/paulscherrerinstitute/ecmccfg)
 + Support for data validation:
    + Rules are defined in a JSON file
    + Type checking (integer, float, string, boolean...)
@@ -24,21 +29,30 @@ See [CHANGELOG.md](CHANGELOG.md)
 
 See [doc/ecb.md](doc/ecb.md)
 
+
 ## building
-### dependencies
-- `make`, to build
+### prerequisites
+
+- `make`, standard build tool
 - git, for version numbering
 - (google test, for unit tests)
 - (astyle, for code formatting `make checkstyle`)
 
-to build ECB, just type:
+to build *ECB*, run the following command:
 
-    make clean
-    make -j8
+```bash
+make clean && make -j8
+
+make clean && make ARCH=deb10 -j8  # for Debian 10 cross-compilation
+make clean && make ARCH=deb12 -j8  # for Debian 12 cross-compilation
+```
+
+Make sure you have a cross-compiler toolchain for the target architecture
+installed.
 
 
 ### tested compilers
-- g++ 8.3.0, 8.5.0: does not work because of broken `std::filesystem` implementation 
+- g++ 8.3.0, 8.5.0: works
 - g++ 11.5.0: works
 - g++ 12.2.0: works
 - clang++ 18.1.8: works
@@ -46,18 +60,24 @@ to build ECB, just type:
 
 
 ## testing
-
 ### unit tests
 
-    # make unit tests (test_ecb)
-    make test
-    cd ./bin
-    ./test_ecb_rhel
+*ECB* includes a suite of unit test, to run the tests:
 
-    # ecb debug version, disables compiler optimization
-    make debug
+```bash
+make test -j8
+cd ./bin
+./ecb_test
+```
 
-### compare with python jinja2
+to create a *ECB* version without any compiler optimization, run the following
+command:
+
+```bash
+make debug
+```
+
+### compare with Python jinja2
 The script `scripts/compare_ecb_jinja` runs ECB and Jinja2 on the same configuration
 and template directory and compares the output of both.
 
