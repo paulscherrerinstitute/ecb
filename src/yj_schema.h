@@ -20,7 +20,7 @@
 #define _YJ_SCHEMA_H_
 
 #include <istream>
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include <string>
 
 namespace ecb

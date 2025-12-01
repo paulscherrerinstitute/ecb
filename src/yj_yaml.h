@@ -19,7 +19,7 @@
 #ifndef _YJ_YAML_H_
 #define _YJ_YAML_H_
 
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 
 namespace ecb
 {

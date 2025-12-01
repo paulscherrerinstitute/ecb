@@ -20,7 +20,7 @@
 #define _YJ_RENDER_H_
 
 #include <istream>
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include <string>
 
 #define ECMC_YJ_RENDER_MAX_INCLUDE_DEPTH 5

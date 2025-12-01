@@ -1,4 +1,4 @@
-CXXFLAGS +=-I../vendor/nlohmann -I../vendor/inja -I../vendor/rapidyaml
+CXXFLAGS +=-I../vendor -I../vendor/inja -I../vendor/rapidyaml
 CXXFLAGS +=-O3
 
 SRC := $(wildcard **.cc)

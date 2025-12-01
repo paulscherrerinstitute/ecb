@@ -17,7 +17,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "gtest/gtest.h"
-#include "json.hpp"
+#include "nlohmann/json.hpp"
 #include "yj_yaml.h"
 #include <string>
 

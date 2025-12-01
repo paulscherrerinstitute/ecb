@@ -1,4 +1,4 @@
-CXXFLAGS +=-I../vendor/nlohmann -I../vendor/inja -I../vendor/rapidyaml
+CXXFLAGS +=-I../vendor -I../vendor/inja -I../vendor/rapidyaml
 CXXFLAGS +=-g -O0
 LIBS = -lpthread -lgtest -lgtest_main
 
