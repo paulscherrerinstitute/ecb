@@ -24,7 +24,8 @@
 #include "yj_cfg.h"
 #include "yj_common.h"
 
-int main(int argc, char* argv[])
+
+void ecb_run(int argc, char* argv[])
 {
     auto OBJ_argparser = ecb::ArgHandler();
 
@@ -126,7 +127,7 @@ int main(int argc, char* argv[])
         {
             std::cout << "ECB - ecmc configuration builder" << std::endl
                 << "--------------------------------" << std::endl
-                << "version: " << MAKEFILE_VERSION << std::endl
+                << "version: " << MAKEFILE_BUILD_VERSION << std::endl
                 << "build  : #" << MAKEFILE_BUILD_NUMBER << MAKEFILE_BUILD_DIRTY << std::endl
                 << "date   : " << MAKEFILE_BUILD_DATE << std::endl
                 << "hash   : " << MAKEFILE_BUILD_HASH << std::endl << "---" << std::endl;
@@ -142,3 +143,8 @@ int main(int argc, char* argv[])
     }
 }
 
+
+int main(int argc, char* argv[])
+{
+    ecb_run(argc, argv);
+}

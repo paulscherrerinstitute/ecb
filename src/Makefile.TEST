@@ -3,7 +3,7 @@ CXXFLAGS +=-g -O0
 LDLIBS += -lpthread -lgtest -lgtest_main -lstdc++fs
 
 SRC := $(wildcard **.cc)
-SRC_TEST := $(filter-out ecb.cc, $(SRC))
+SRC_TEST := $(filter-out ecb.cc ecb_epics.cc, $(SRC))
 
 OBJS=$(SRC_TEST:.cc=.o)
 

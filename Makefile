@@ -1,8 +1,8 @@
-VERSION = 1.4.0
-
 ARCH ?= default
 
-export CXXFLAGS = -std=c++17 -Wall -Werror $(BUILD_INFO)
+export CXXFLAGS = -std=c++17 -Wall -Werror
+
+include src/Makefile.COMMON
 
 ifeq ($(ARCH),default)
 export CC := g++
@@ -18,14 +18,6 @@ ifeq ($(ARCH),deb12)
 export CC := /opt/xgcc/gcc-12.2.0-deb12/bin/x86_64-deb12-linux-gnu-c++
 export CXX := /opt/xgcc/gcc-12.2.0-deb12/bin/x86_64-deb12-linux-gnu-c++
 endif
-
-# export build information
-BUILD_NUMBER = $(shell git rev-list --count main)
-BUILD_DIRTY  = $(shell [ -n "$$(git status --porcelain)" ] && echo "-dirty")
-BUILD_HASH = $(shell git rev-parse HEAD)
-BUILD_DATE = $(shell date -Iseconds)
-export BUILD_INFO = -DMAKEFILE_VERSION="\"$(VERSION)\"" -DMAKEFILE_BUILD_NUMBER="\"$(BUILD_NUMBER)\"" -DMAKEFILE_BUILD_DIRTY="\"$(BUILD_DIRTY)\"" -DMAKEFILE_BUILD_HASH="\"$(BUILD_HASH)\"" -DMAKEFILE_BUILD_DATE="\"$(BUILD_DATE)\""
-
 
 all: ecb
 

@@ -41,10 +41,10 @@ See [doc/ecb.md](doc/ecb.md)
 to build *ECB*, run the following command:
 
 ```bash
-make clean && make -j8
+make -f Makefile clean && make -f Makefile -j8
 
-make clean && make ARCH=deb10 -j8  # for Debian 10 cross-compilation
-make clean && make ARCH=deb12 -j8  # for Debian 12 cross-compilation
+make -f Makefile clean && make -f Makefile ARCH=deb10 -j8  # for Debian 10 cross-compilation
+make -f Makefile clean && make -f Makefile ARCH=deb12 -j8  # for Debian 12 cross-compilation
 ```
 
 Make sure you have a cross-compiler toolchain for the target architecture
@@ -65,7 +65,7 @@ installed.
 *ECB* includes a suite of unit test, to run the tests:
 
 ```bash
-make test -j8
+make -f Makefile test -j8
 cd ./bin
 ./ecb_test
 ```
@@ -74,7 +74,7 @@ to create a *ECB* version without any compiler optimization, run the following
 command:
 
 ```bash
-make debug
+make -f Makefile debug
 ```
 
 ### compare with Python jinja2
@@ -88,3 +88,10 @@ and template directory and compares the output of both.
     ./compare_ecb_jinja yaml/plc1.yaml plc
 
 please adapt paths in `compare_ecb_jinja` to fit your setup.
+
+## require - driver module
+to build a driver module intended for use with `require`, simply run:
+
+```bash
+make clean && make install
+```

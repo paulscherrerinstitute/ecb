@@ -6,3 +6,4 @@ ecb
 test_ecb
 *.o
 bin
+O.*

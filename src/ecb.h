@@ -65,4 +65,13 @@ const std::string help_text = "\nECB - ecmc configuration builder\n"
     "\n";
 }
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+void ecb_run(int argc, char *argv[]);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif // _ECB_H_

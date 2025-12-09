@@ -3,7 +3,7 @@ CXXFLAGS +=-O3
 LDLIBS += -lstdc++fs
 
 SRC := $(wildcard **.cc)
-SRC_EXE:=$(filter-out $(wildcard *_test.cc), $(SRC))
+SRC_EXE:=$(filter-out $(wildcard *_test.cc) ecb_epics.cc, $(SRC))
 
 OBJS=$(SRC_EXE:.cc=.o)
 OBJS_TEST=$(SRC:.cc=.o)
