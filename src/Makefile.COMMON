@@ -1,6 +1,6 @@
-export VERSION = 1.4.0
+export VERSION = 1.5.0
 
-export CXXFLAGS += -DMAKEFILE_BUILD_VERSION=\""1.4.0\""
+export CXXFLAGS += -DMAKEFILE_BUILD_VERSION=\""1.5.0\""
 export CXXFLAGS += -DMAKEFILE_BUILD_NUMBER=\""$(shell git rev-list --count main)\""
 export CXXFLAGS += -DMAKEFILE_BUILD_DIRTY=\""$(shell [ -n "$$(git status --porcelain)" ] && echo "-dirty")\""
 export CXXFLAGS += -DMAKEFILE_BUILD_HASH=\""$(shell git rev-parse HEAD)\""
