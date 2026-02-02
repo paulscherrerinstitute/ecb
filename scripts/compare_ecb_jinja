@@ -4,9 +4,8 @@ set -e
 # config paths
 yaml_file="$1"
 
-ecmccfg_cpp='../../ecmccfg4inja_fork/'
-#ecmccfg_py='../../ecmccfg'
-ecmccfg_py='../../ecmccfg4inja_fork/'
+ecmccfg_cpp='../../ecmccfg/'
+ecmccfg_py='../../ecmccfg/'
 
 # axis / encoder / plc
 py_file='axisYamlJinja2.py'

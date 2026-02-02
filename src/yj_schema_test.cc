@@ -325,6 +325,31 @@ TEST_F(YjSchemaFixture, check_datatypes_boolean)
     EXPECT_ANY_THROW(dut1.check_datatypes(j1));
 }
 
+TEST_F(YjSchemaFixture, check_datatypes_python_boolean)
+{
+    schema.str(R"(
+      {
+        "testSchema": {
+          "schema": {
+            "a.b": {"type": "boolean"}
+          }
+        }
+      })"
+    );
+
+    auto dut1 = YjSchema(schema, "");
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "True";
+    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == true);
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "False";
+    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == false);
+}
+
 TEST_F(YjSchemaFixture, check_datatypes_integer)
 {
     schema.str(R"(

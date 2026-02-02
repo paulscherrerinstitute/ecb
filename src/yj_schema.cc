@@ -291,6 +291,22 @@ ecb::YjSchema::check_datatypes(
                     if (datatype == "boolean" && cfg_data[key].is_boolean())
                         is_valid = true;
 
+                    if (datatype == "boolean" && cfg_data[key].is_string())
+                    {
+                        std::string value = cfg_data[key].template get<std::string>();
+
+                        if (value == "True")
+                        {
+                            cfg_data[key] = true;
+                            is_valid = true;
+                        }
+                        if (value == "False")
+                        {
+                            cfg_data[key] = false;
+                            is_valid = true;
+                        }
+                    }
+
                     if (datatype == "float" && cfg_data[key].is_number_float())
                         is_valid = true;
 
