@@ -284,7 +284,7 @@ ecb::YjSchema::add_schema_default_values(
 }
 
 void
-ecb::YjSchema::check_datatypes(
+ecb::YjSchema::check_and_normalize_datatypes(
     nlohmann::json& cfg_data)
 {
     for (const auto& schema_entry : schema_.items())
@@ -319,14 +319,32 @@ ecb::YjSchema::check_datatypes(
                     if (datatype == "boolean" && cfg_data[key].is_string())
                     {
                         std::string value = cfg_data[key].template get<std::string>();
+                        ecb::yj_common::to_lower(value);
 
-                        if (value == "True")
+                        if ((value == "true") || (value == "yes"))
                         {
                             cfg_data[key] = true;
                             is_valid = true;
                         }
 
-                        if (value == "False")
+                        if ((value == "false") || (value == "no"))
+                        {
+                            cfg_data[key] = false;
+                            is_valid = true;
+                        }
+                    }
+
+                    if (datatype == "boolean" && cfg_data[key].is_number_integer())
+                    {
+                        int value = cfg_data[key].template get<int>();
+
+                        if (value == 1) 
+                        {
+                            cfg_data[key] = true;
+                            is_valid = true;
+                        }
+
+                        if (value == 0)
                         {
                             cfg_data[key] = false;
                             is_valid = true;

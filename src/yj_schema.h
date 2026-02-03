@@ -71,10 +71,11 @@ public:
 
 
     // This function verifies that the datatypes in `cfg_data` match those
-    // defined in the schema file.  If there is a mismatch, the function throws
-    // an exception to indicate an error. If all datatypes are ok, the function
-    // just returns.
-    void check_datatypes(
+    // defined in the schema file.  Also this function normalizes native
+    // datatypes, especially booleans. If there is a mismatch, the function
+    // throws an exception to indicate an error. If all datatypes are ok, the
+    // function just returns.
+    void check_and_normalize_datatypes(
         nlohmann::json& cfg_data);
 
 

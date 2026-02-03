@@ -183,17 +183,83 @@ TEST_F(YjSchemaFixture, check_datatypes_mixed)
     // string
     j1.clear();
     j1["/a/b"_json_pointer] = "virtual";
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
 
     // integer
     j1.clear();
     j1["/a/b"_json_pointer] = 2;
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
 
     // invalid datatype
     j1.clear();
     j1["/a/b"_json_pointer] = true;
-    EXPECT_ANY_THROW(dut1.check_datatypes(j1));
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1));
+}
+
+TEST_F(YjSchemaFixture, check_datatypes_norm_booleans)
+{
+    schema.str(R"(
+      {
+        "testSchema": {
+          "schema": {
+            "a.b": {"type": "boolean"}
+          }
+        }
+      })"
+    );
+
+    auto dut1 = YjSchema(schema, "");
+
+    // true cases
+    j1.clear();
+    j1["/a/b"_json_pointer] = true;
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == true);
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "TrUe";
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == true);
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "yEs";
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == true);
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 1;
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == true);
+
+    // false cases
+    j1.clear();
+    j1["/a/b"_json_pointer] = false;
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == false);
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "FalSe";
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == false);
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = "nO";
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == false);
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 0;
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == false);
+
+    // invalid cases
+    j1.clear();
+    j1["/a/b"_json_pointer] = "True2";
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1));
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 2;
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1));
 }
 
 TEST_F(YjSchemaFixture, add_default_from_key)
@@ -328,11 +394,11 @@ TEST_F(YjSchemaFixture, check_datatypes_boolean)
 
     j1.clear();
     j1["/a/b"_json_pointer] = true;
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
 
     j1.clear();
     j1["/a/b"_json_pointer] = "test";
-    EXPECT_ANY_THROW(dut1.check_datatypes(j1));
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1));
 }
 
 TEST_F(YjSchemaFixture, check_datatypes_python_boolean)
@@ -351,12 +417,12 @@ TEST_F(YjSchemaFixture, check_datatypes_python_boolean)
 
     j1.clear();
     j1["/a/b"_json_pointer] = "True";
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
     EXPECT_TRUE(j1["/a/b"_json_pointer] == true);
 
     j1.clear();
     j1["/a/b"_json_pointer] = "False";
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
     EXPECT_TRUE(j1["/a/b"_json_pointer] == false);
 }
 
@@ -376,15 +442,15 @@ TEST_F(YjSchemaFixture, check_datatypes_integer)
 
     j1.clear();
     j1["/a/b"_json_pointer] = 2;
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
 
     j1.clear();
     j1["/a/b"_json_pointer] = -1;
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
 
     j1.clear();
     j1["/a/b"_json_pointer] = "test";
-    EXPECT_ANY_THROW(dut1.check_datatypes(j1));
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1));
 }
 
 TEST_F(YjSchemaFixture, check_datatypes_float)
@@ -403,15 +469,15 @@ TEST_F(YjSchemaFixture, check_datatypes_float)
 
     j1.clear();
     j1["/a/b"_json_pointer] = 42.42;
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
 
     j1.clear();
     j1["/a/b"_json_pointer] = "test";
-    EXPECT_ANY_THROW(dut1.check_datatypes(j1));
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1));
 
     j1.clear();
     j1["/a/b"_json_pointer] = 42;
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
 }
 
 TEST_F(YjSchemaFixture, check_datatypes_string)
@@ -430,11 +496,11 @@ TEST_F(YjSchemaFixture, check_datatypes_string)
 
     j1.clear();
     j1["/a/b"_json_pointer] = "fjefe";
-    EXPECT_NO_THROW(dut1.check_datatypes(j1));
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1));
 
     j1.clear();
     j1["/a/b"_json_pointer] = true;
-    EXPECT_ANY_THROW(dut1.check_datatypes(j1));
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1));
 }
 
 TEST_F(YjSchemaFixture, check_datatypes_empty)
@@ -453,7 +519,7 @@ TEST_F(YjSchemaFixture, check_datatypes_empty)
 
     j1.clear();
     j1["/a/b"_json_pointer] = true;
-    EXPECT_ANY_THROW(dut1.check_datatypes(j1));
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1));
 }
 
 TEST_F(YjSchemaFixture, check_datatypes_list)
@@ -473,12 +539,12 @@ TEST_F(YjSchemaFixture, check_datatypes_list)
     // invalid list
     j1.clear();
     j1["/a/b"_json_pointer] = true;
-    EXPECT_ANY_THROW(dut1.check_datatypes(j1)) << "case: invalid list";
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1)) << "case: invalid list";
 
     // valid list
     j1.clear();
     j1["/a/b"_json_pointer] = {"a", "b"};
-    EXPECT_NO_THROW(dut1.check_datatypes(j1)) << "case: valid list";
+    EXPECT_NO_THROW(dut1.check_and_normalize_datatypes(j1)) << "case: valid list";
 }
 
 TEST_F(YjSchemaFixture, check_datatypes_unknown)
@@ -497,7 +563,7 @@ TEST_F(YjSchemaFixture, check_datatypes_unknown)
 
     j1.clear();
     j1["/a/b"_json_pointer] = true;
-    EXPECT_ANY_THROW(dut1.check_datatypes(j1));
+    EXPECT_ANY_THROW(dut1.check_and_normalize_datatypes(j1));
 }
 
 TEST_F(YjSchemaFixture, check_required_key)

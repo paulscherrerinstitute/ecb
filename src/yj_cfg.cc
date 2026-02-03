@@ -69,7 +69,7 @@ ecb::YjConfiguration::build(
     OBJ_schema.normalize(cfg_data);
 
     OBJ_schema.add_schema_default_values(cfg_data);
-    OBJ_schema.check_datatypes(cfg_data);
+    OBJ_schema.check_and_normalize_datatypes(cfg_data);
     OBJ_schema.normalize(cfg_data);
 
     if (selected_schema == "axis")
