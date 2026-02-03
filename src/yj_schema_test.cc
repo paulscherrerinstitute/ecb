@@ -100,7 +100,7 @@ TEST_F(YjSchemaFixture, normalize_string_boolean)
         {
           "testSchema": {
             "schema": {
-              "a.b": {"normalize": "(string=boolean) yes=true no=false"}
+              "a.b": {"normalize": ["(string=boolean) yes=true no=false", "(integer=boolean) 1=true 0=false"]}
             }
           }
         })"
@@ -115,6 +115,16 @@ TEST_F(YjSchemaFixture, normalize_string_boolean)
 
     j1.clear();
     j1["/a/b"_json_pointer] = "nO";
+    dut1.normalize(j1);
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == false) << "a.b: false";
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 1;
+    dut1.normalize(j1);
+    EXPECT_TRUE(j1["/a/b"_json_pointer] == true) << "a.b: true";
+
+    j1.clear();
+    j1["/a/b"_json_pointer] = 0;
     dut1.normalize(j1);
     EXPECT_TRUE(j1["/a/b"_json_pointer] == false) << "a.b: false";
 

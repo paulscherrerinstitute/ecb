@@ -50,67 +50,92 @@ ecb::YjSchema::YjSchema(std::istream& schema, const std::string& selected_schema
 }
 
 void
-ecb::YjSchema::normalize(json& json)
+ecb::YjSchema::normalize(json& yaml_data)
 {
     for (const auto& schema_entry : schema_.items())
     {
+        // quick check if this is a normalize key
         if (schema_entry.key().find("normalize") == std::string::npos)
             continue;
 
         std::smatch key_to_normalize;
-
         if (std::regex_search(schema_entry.key(), key_to_normalize,
-                std::regex(R"(.*\/(.*)\/(?=(normalize)))")))
+            std::regex(R"(.*\/(.*)\/(?=(normalize)))")))
         {
-            const auto json_ptr = ecb::yj_common::generate_json_pointer(key_to_normalize[1].str());
-            const auto split = ecb::yj_common::tokenize(
-                    schema_entry.value().template get<std::string>(),
-                    ecb::yj_common::REGEX_token_sep_space);
+            const auto key_ptr = ecb::yj_common::generate_json_pointer(key_to_normalize[1].str());
 
-            // skip of there is nothing to do
-            if (json.contains(json_ptr) == false || split.size() < 2)
-                continue;
-
-
-            // normalize (string=integer) or (string=string)
-            if (((split[0] == "(string=integer)") ||
-                    (split[0] == "(string_remove_whitespaces=integer)") ||
-                    (split[0] == "(string=string)") ||
-                    (split[0] == "(string=boolean)")) &&
-                (json[json_ptr].is_string()))
+            for (const auto& val : schema_entry.value())
             {
-                for (auto norm_values = std::next(split.cbegin()) ; norm_values != split.cend();
-                    ++norm_values)
+                const auto split = ecb::yj_common::tokenize(
+                        val,
+                        ecb::yj_common::REGEX_token_sep_space);
+
+                // skip if there is nothing to do
+                if (yaml_data.contains(key_ptr) == false || split.size() < 2)
+                    continue;
+
+                // normalize (string=* types
+                if ( (split[0].find("\(string") == 0) && yaml_data[key_ptr].is_string())
                 {
-                    std::smatch norm_pair;
-                    std::regex_search(*norm_values, norm_pair, REGEX_norm_pair);
-
-                    std::string from_json = json[json_ptr];
-                    std::string from_scheme = norm_pair[1];
-
-                    // remove whitespaces
-                    if (split[0] == "(string_remove_whitespaces=integer)")
-                        ecb::yj_common::replace_substring(from_json, " ", "");
-
-                    // use lower casing for comparison
-                    ecb::yj_common::to_lower(from_json);
-                    ecb::yj_common::to_lower(from_scheme);
-
-                    if (from_json == from_scheme)
+                    for (auto norm_values = std::next(split.cbegin()) ; norm_values != split.cend();
+                        ++norm_values)
                     {
-                        if ((split[0] == "(string=integer)") || (split[0] == "(string_remove_whitespaces=integer)"))
-                            json[json_ptr] = std::stoi(norm_pair[2]);
+                        std::smatch norm_pair;
+                        std::regex_search(*norm_values, norm_pair, REGEX_norm_pair);
 
-                        if (split[0] == "(string=string)")
-                            json[json_ptr] = norm_pair[2];
+                        std::string from_yaml = yaml_data[key_ptr];
+                        std::string from_scheme = norm_pair[1];
 
-                        if ((split[0] == "(string=boolean)") && ((norm_pair[2] == "true") || (norm_pair[2] == "True")))
-                            json[json_ptr] = true;
+                        // remove whitespaces
+                        if (split[0] == "(string_remove_whitespaces=integer)")
+                            ecb::yj_common::replace_substring(from_yaml, " ", "");
 
-                        if ((split[0] == "(string=boolean)") && ((norm_pair[2] == "false") || (norm_pair[2] == "False")))
-                            json[json_ptr] = false;
+                        // use lower casing for comparison
+                        ecb::yj_common::to_lower(from_yaml);
+                        ecb::yj_common::to_lower(from_scheme);
 
-                        break;
+                        if (from_yaml == from_scheme)
+                        {
+                            if ((split[0] == "(string=integer)") || (split[0] == "(string_remove_whitespaces=integer)"))
+                                yaml_data[key_ptr] = std::stoi(norm_pair[2]);
+
+                            if (split[0] == "(string=string)")
+                                yaml_data[key_ptr] = norm_pair[2];
+
+                            if ((split[0] == "(string=boolean)") && ((norm_pair[2] == "true") || (norm_pair[2] == "True")))
+                                yaml_data[key_ptr] = true;
+
+                            if ((split[0] == "(string=boolean)") && ((norm_pair[2] == "false") || (norm_pair[2] == "False")))
+                                yaml_data[key_ptr] = false;
+
+                            break;
+                        }
+                    }
+                }
+
+                // normalize (integer=boolean)
+                if ((split[0] == "(integer=boolean)") && yaml_data[key_ptr].is_number_integer())
+                {
+                    for (auto norm_values = std::next(split.cbegin()) ; norm_values != split.cend();
+                        ++norm_values)
+                    {
+                        std::smatch norm_pair;
+                        std::regex_search(*norm_values, norm_pair, REGEX_norm_pair);
+
+                        int from_yaml = yaml_data[key_ptr];
+                        std::string from_scheme_str = norm_pair[1];
+                        int from_scheme = std::stoi(norm_pair[1]);
+
+                        if (from_yaml == from_scheme)
+                        {
+                            if ((split[0] == "(integer=boolean)") && ((norm_pair[2] == "true") || (norm_pair[2] == "True")))
+                                yaml_data[key_ptr] = true;
+
+                            if ((split[0] == "(integer=boolean)") && ((norm_pair[2] == "false") || (norm_pair[2] == "false")))
+                                yaml_data[key_ptr] = false;
+
+                            break;
+                        }
                     }
                 }
             }
@@ -267,7 +292,7 @@ ecb::YjSchema::check_datatypes(
         std::smatch match;
 
         if (std::regex_search(schema_entry.key(), match,
-                std::regex(R"(/schema/(.*)/type)")))
+            std::regex(R"(/schema/(.*)/type)")))
         {
             const auto key = ecb::yj_common::generate_json_pointer(match[1].str());
 
@@ -285,7 +310,7 @@ ecb::YjSchema::check_datatypes(
                         is_valid = true;
 
                     if (datatype == "integer" && (cfg_data[key].is_number_integer()
-                            || cfg_data[key].is_number_unsigned()))
+                        || cfg_data[key].is_number_unsigned()))
                         is_valid = true;
 
                     if (datatype == "boolean" && cfg_data[key].is_boolean())
@@ -300,6 +325,7 @@ ecb::YjSchema::check_datatypes(
                             cfg_data[key] = true;
                             is_valid = true;
                         }
+
                         if (value == "False")
                         {
                             cfg_data[key] = false;
@@ -524,7 +550,7 @@ ecb::YjSchema::find_grand_schema_prefix(const std::string& selected_schema,
         const auto REGEX_find_prefix_and_condition = std::regex(rege);
 
         if (std::regex_search(schema.key(), prefix_and_condition,
-                REGEX_find_prefix_and_condition))
+            REGEX_find_prefix_and_condition))
         {
             // prefix_and_condition[1] = /grandSchema/axis/axis.abc=0/ -> prefix
             // prefix_and_condition[2] = axis.type=0 -> condition
