@@ -156,7 +156,9 @@ schema looks like this:
       comparison.  For example `end effector` is changed to `endeffector` and
       matches then the first normalization. Therefore `end effector` is
       normalized to 2.
-    - `(string=boolean) yes=true no=false` string to bool normalization
+    - `(string=boolean) A=true B=false` string to bool normalization
+- `normalize`: `["(D1=D2) A=B...", "(D3=D4) C=D...."] if multiple
+  normalization sets are required, they can be passed as a list.
 - `min`: defines the minum allowed value. This check is only applied if the
   datatype of the specified key (e.g. `test.test2.type`) is `integer` or
   `float`. For other datatypes, the check is skipped. If the value is smaller

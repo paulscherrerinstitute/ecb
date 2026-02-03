@@ -1,3 +1,18 @@
+v1.6.0
+------
+
++ the normalize function now accepts a list of strings for normalization, e.g.
+  `["(A=B) a1=b1 a2=b2", "(C=D) c1=d1 c2=d2"]`
+
++ the following values are now accepted as booleans:
+  - true/false (case insensitive)
+  - yes/no (case insensitive)
+  - 1/0
+
+v1.5.0
+------
+
++ support True/False as boolean values
 
 v1.4.0
 ------
